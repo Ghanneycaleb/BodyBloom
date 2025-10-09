@@ -1,16 +1,211 @@
-# React + Vite
+#  BodyBloom
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Tagline:** *Track your progress. Feel your growth.*
 
-Currently, two official plugins are available:
+A modern fitness tracking web application designed to motivate, educate, and empower users on their fitness journey. BodyBloom combines intuitive workout logging, exercise discovery, progress visualization, and daily motivation to create a holistic fitness companion.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+##  Project Vision
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+BodyBloom goes beyond simple workout tracking—it's a comprehensive fitness experience that:
+- Makes fitness management **effortless and exciting**
+- Provides **data-driven insights** into your progress
+- Delivers **daily motivation** through quotes and music
+- Helps users **stay consistent** and feel empowered
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+##  Features
+
+###  Current Features (Week 1)
+-  **Responsive Navigation** - Seamless navigation across all pages (desktop & mobile)
+-  **Modern UI Components** - Reusable Button, Card, Modal, and Loader components
+-  **Clean Layout System** - Consistent layout with navbar and footer
+-  **Landing Page** - Engaging home page with feature highlights
+
+###  Upcoming Features
+-  **Workout Logging** - Record exercises, sets, reps, and weights
+-  **Workout History** - View and manage past sessions grouped by date
+-  **Exercise Library** - Explore exercises via WGER API integration
+-  **Motivation Hub** - Daily quotes and curated workout playlists
+-  **Progress Dashboard** - Interactive charts and performance analytics
+-  **Dark Mode** - Toggle between light and dark themes
+
+---
+
+##  Tech Stack
+
+| Category | Technology |
+|----------|-----------|
+| **Frontend** | React 18 |
+| **Routing** | React Router v6 |
+| **Styling** | Tailwind CSS v4 |
+| **Build Tool** | Vite |
+| **State Management** | React Hooks (useState, useEffect) |
+| **Data Storage** | LocalStorage (Phase 1) → Firebase (Phase 2) |
+| **API Integration** | WGER Exercise API |
+| **Charts & Visualization** | Recharts / Chart.js |
+| **Deployment** | Vercel / Netlify |
+| **Version Control** | Git & GitHub |
+
+---
+
+##  Installation & Setup
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- Git
+
+### Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Ghanneycaleb/bodybloom.git
+   cd bodybloom
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open in browser**
+   ```
+   Navigate to http://localhost:5173
+   ```
+
+---
+
+##  Project Structure
+
+```
+bodybloom/
+├── public/              # Static assets
+├── src/
+│   ├── components/      # Reusable React components
+│   │   ├── common/      # Shared UI components
+│   │   ├── layout/      # Layout components (Navbar, Footer)
+│   │   ├── workout/     # Workout-related components (coming soon)
+│   │   ├── dashboard/   # Dashboard components (coming soon)
+│   │   └── ...
+│   ├── pages/           # Page components (Home, Dashboard, etc.)
+│   ├── hooks/           # Custom React hooks (coming soon)
+│   ├── services/        # API services (coming soon)
+│   ├── utils/           # Helper functions (coming soon)
+│   ├── data/            # Static data (quotes, playlists)
+│   ├── App.jsx          # Main app component with routing
+│   ├── main.jsx         # App entry point
+│   └── index.css        # Global styles with Tailwind
+├── .gitignore
+├── package.json
+├── vite.config.js
+└── README.md
+```
+
+---
+
+##  Development Roadmap
+
+### Week 1: Foundation 
+- [x] Project initialization and setup
+- [x] Tailwind CSS v4 configuration
+- [x] Routing with React Router
+- [x] Reusable component library (Button, Card, Modal, Loader)
+- [x] Responsive layout and navigation
+- [x] Landing page design
+
+### Week 2: Core Features (In Progress)
+- [ ] Workout logging functionality
+- [ ] LocalStorage integration for data persistence
+- [ ] WGER API integration for exercise data
+- [ ] Workout history page with filtering
+- [ ] Custom hooks for state management
+
+### Week 3: Enhancement & Polish
+- [ ] Progress dashboard with interactive charts
+- [ ] Motivation hub (quotes + playlist)
+- [ ] Responsive design refinements
+- [ ] Animations and transitions
+- [ ] Performance optimization
+- [ ] Deployment to production
+
+### Future Enhancements
+- [ ] User authentication with Firebase
+- [ ] Workout streak tracking
+- [ ] Personal fitness goals
+- [ ] AI-powered workout recommendations
+- [ ] Social features (sharing, challenges)
+- [ ] PWA support for offline usage
+
+---
+
+##  Design Philosophy
+
+BodyBloom follows modern web design principles:
+
+- **Clean & Minimalist** - Focus on content, remove clutter
+- **User-Centric** - Intuitive navigation and clear CTAs
+- **Responsive First** - Mobile-friendly from the ground up
+- **Accessible** - WCAG compliant color contrasts and semantic HTML
+- **Performance** - Optimized load times and smooth interactions
+
+---
+
+##  Contributing
+
+This is a capstone project, but suggestions and feedback are welcome!
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+##  License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+##  Developer
+
+
+- GitHub: [https://github.com/Ghanneycaleb]
+- LinkedIn: [https://linkedin.com/in/calebghanney]
+
+
+---
+
+##  Acknowledgments
+
+- **WGER API** - For providing comprehensive exercise data
+- **Tailwind CSS** - For the amazing utility-first framework
+- **React Community** - For incredible tools and resources
+- **Fitness Enthusiasts** - For inspiration and feedback
+
+---
+
+##  Screenshots
+
+*Coming soon! Screenshots will be added as features are completed.*
+
+---
+
+<div align="center">
+
+**Built with love and dedication to fitness**
+
+*BodyBloom - Where Progress Blooms* 🌱
+
+</div>
+
+
