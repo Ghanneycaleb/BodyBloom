@@ -92,36 +92,36 @@
 
 // export default Home;
 
-import { Sparkle } from 'lucide-react'; 
-import { Link } from 'react-router-dom';
-import Button from '../components/common/Button';
-import Card from '../components/common/Card';
+import { Sparkle } from "lucide-react";
+import { Link } from "react-router-dom";
+import Button from "../components/common/Button";
+import Card from "../components/common/Card";
 
 const Home = () => {
   const features = [
     {
-      title: 'Log Workouts',
-      description: 'Track exercises, sets, reps, and weights with ease.',
-      icon: '📝',
-      link: '/log',
+      title: "Log Workouts",
+      description: "Track exercises, sets, reps, and weights with ease.",
+      icon: "📝",
+      link: "/log",
     },
     {
-      title: 'View History',
-      description: 'Review past workouts and monitor your consistency.',
-      icon: '📊',
-      link: '/history',
+      title: "View History",
+      description: "Review past workouts and monitor your consistency.",
+      icon: "📊",
+      link: "/history",
     },
     {
-      title: 'Explore Exercises',
-      description: 'Discover new workouts from our exercise library.',
-      icon: '🔍',
-      link: '/explore',
+      title: "Explore Exercises",
+      description: "Discover new workouts from our exercise library.",
+      icon: "🔍",
+      link: "/explore",
     },
     {
-      title: 'Stay Motivated',
-      description: 'Get daily quotes and workout playlists for inspiration.',
-      icon: '💪',
-      link: '/motivation',
+      title: "Stay Motivated",
+      description: "Get daily quotes and workout playlists for inspiration.",
+      icon: "💪",
+      link: "/motivation",
     },
   ];
 
@@ -129,19 +129,13 @@ const Home = () => {
     <div>
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center text-center py-24 px-4 bg-gradient-to-b from-white to-indigo-50 scroll-smooth">
-        {/* <h1 className="text-5xl md:text-6xl font-extrabold text-primary-600 mb-6 flex items-center justify-center gap-2">
-          Welcome to BodyBloom 
-          <span className="animate-pulse">🌸</span>
-        </h1> */}
-
         <h1 className="text-5xl md:text-6xl font-extrabold text-primary-600 mb-6 flex items-center justify-center gap-2">
-  Welcome to BodyBloom
-  <Sparkle className="w-8 h-8 text-primary-600 animate-spin-pulse" />
-
-
-</h1>
+          Welcome to BodyBloom
+          <Sparkle className="w-8 h-8 text-primary-600 animate-spin-pulse" />
+        </h1>
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Where your fitness journey blooms — track, train, and transform with ease.
+          Where your fitness journey blooms — track, train, and transform with
+          ease.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link to="/log">
@@ -179,13 +173,18 @@ const Home = () => {
 
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-2xl p-12 text-center text-white">
-        <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Fitness?</h2>
+        <h2 className="text-3xl font-bold mb-4">
+          Ready to Transform Your Fitness?
+        </h2>
         <p className="text-primary-100 mb-8 max-w-xl mx-auto">
-          Join BodyBloom today and start tracking your progress towards a healthier, stronger you.
+          Join BodyBloom today and start tracking your progress towards a
+          healthier, stronger you.
         </p>
         <Link to="/log">
-          <Button variant="secondary" className="bg-white text-primary-700 hover:bg-gray-50 hover:animate-bounce-smooth">
-            
+          <Button
+            variant="secondary"
+            className="bg-white text-primary-700 hover:bg-gray-50 hover:shadow-lg hover:animate-bounce-smooth"
+          >
             Get Started Now
           </Button>
         </Link>
