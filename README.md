@@ -18,7 +18,7 @@ BodyBloom goes beyond simple workout tracking—it's a comprehensive fitness exp
 
 ##  Features
 
-###  Current Features (Week 1)
+###  Current Features
 -  **Responsive Navigation** - Seamless navigation across all pages (desktop & mobile)
 -  **Modern UI Components** - Reusable Button, Card, Modal, and Loader components
 -  **Clean Layout System** - Consistent layout with navbar and footer
@@ -109,32 +109,6 @@ bodybloom/
 └── README.md
 ```
 
----
-
-##  Development Roadmap
-
-### Week 1: Foundation 
-- [x] Project initialization and setup
-- [x] Tailwind CSS v4 configuration
-- [x] Routing with React Router
-- [x] Reusable component library (Button, Card, Modal, Loader)
-- [x] Responsive layout and navigation
-- [x] Landing page design
-
-### Week 2: Core Features (In Progress)
-- [ ] Workout logging functionality
-- [ ] LocalStorage integration for data persistence
-- [ ] WGER API integration for exercise data
-- [ ] Workout history page with filtering
-- [ ] Custom hooks for state management
-
-### Week 3: Enhancement & Polish
-- [ ] Progress dashboard with interactive charts
-- [ ] Motivation hub (quotes + playlist)
-- [ ] Responsive design refinements
-- [ ] Animations and transitions
-- [ ] Performance optimization
-- [ ] Deployment to production
 
 ### Future Enhancements
 - [ ] User authentication with Firebase
