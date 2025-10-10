@@ -51,3 +51,26 @@ body {
 .hover\:animate-bounce-smooth:hover {
   animation: bounce-smooth 0.6s ease-in-out infinite;
 }
+
+@keyframes spin-pulse {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  40% {
+    transform: rotate(360deg) scale(1.2);
+  }
+  60% {
+    transform: rotate(360deg) scale(1.25);
+  }
+  80% {
+    transform: rotate(360deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.animate-spin-pulse {
+  animation: spin-pulse 2s ease-in-out infinite;
+}
+
