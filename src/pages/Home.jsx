@@ -176,7 +176,8 @@ const Home = () => {
           Join BodyBloom today and start tracking your progress towards a healthier, stronger you.
         </p>
         <Link to="/log">
-          <Button variant="secondary" className="bg-white text-primary-700 hover:bg-gray-50">
+          <Button variant="secondary" className="bg-white text-primary-700 hover:bg-gray-50 hover:animate-bounce-smooth">
+            
             Get Started Now
           </Button>
         </Link>
