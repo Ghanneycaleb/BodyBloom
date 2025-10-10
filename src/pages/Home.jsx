@@ -92,6 +92,7 @@
 
 // export default Home;
 
+import { Sparkle } from 'lucide-react'; 
 import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
@@ -128,10 +129,17 @@ const Home = () => {
     <div>
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center text-center py-24 px-4 bg-gradient-to-b from-white to-indigo-50 scroll-smooth">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-primary-600 mb-6 flex items-center justify-center gap-2">
+        {/* <h1 className="text-5xl md:text-6xl font-extrabold text-primary-600 mb-6 flex items-center justify-center gap-2">
           Welcome to BodyBloom 
           <span className="animate-pulse">🌸</span>
-        </h1>
+        </h1> */}
+
+        <h1 className="text-5xl md:text-6xl font-extrabold text-primary-600 mb-6 flex items-center justify-center gap-2">
+  Welcome to BodyBloom
+  <Sparkle className="w-8 h-8 text-primary-600 animate-spin-pulse" />
+
+
+</h1>
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
           Where your fitness journey blooms — track, train, and transform with ease.
         </p>
@@ -176,7 +184,8 @@ const Home = () => {
           Join BodyBloom today and start tracking your progress towards a healthier, stronger you.
         </p>
         <Link to="/log">
-          <Button variant="secondary" className="bg-white text-primary-700 hover:bg-gray-50">
+          <Button variant="secondary" className="bg-white text-primary-700 hover:bg-gray-50 hover:animate-bounce-smooth">
+            
             Get Started Now
           </Button>
         </Link>
