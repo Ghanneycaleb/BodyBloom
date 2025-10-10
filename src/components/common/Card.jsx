@@ -1,8 +1,8 @@
-const Card = ({ children, className = '', hover = true }) => {
-  const hoverEffect = hover ? 'hover:shadow-md' : '';
-  
+const Card = ({ children, className = "" }) => {
   return (
-    <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-shadow duration-200 ${hoverEffect} ${className}`}>
+    <div
+      className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${className}`}
+    >
       {children}
     </div>
   );
