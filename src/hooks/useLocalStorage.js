@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 
 /**
  * Custom hook for managing state that persists to localStorage
@@ -9,25 +9,40 @@ import { useState, useEffect } from 'react';
 const useLocalStorage = (key, initialValue) => {
   // Get initial value from localStorage or use provided initialValue
   const [storedValue, setStoredValue] = useState(() => {
+    if (typeof window === 'undefined') {
+      return initialValue;
+    }
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      // Avoid parsing "undefined" or null, which are invalid JSON.
+      if (item && item !== 'undefined' && item !== 'null') {
+        return JSON.parse(item);
+      }
+      return initialValue;
     } catch (error) {
       console.error(`Error loading ${key} from localStorage:`, error);
       return initialValue;
     }
   });
 
-  // Update localStorage whenever storedValue changes
-  useEffect(() => {
+  // Return a wrapped version of useState's setter function that ...
+  // ... persists the new value to localStorage.
+  const setValue = useCallback((value) => {
     try {
-      window.localStorage.setItem(key, JSON.stringify(storedValue));
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      // Avoid storing the string "undefined"
+      if (valueToStore === undefined) {
+        window.localStorage.removeItem(key);
+      } else {
+        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      }
     } catch (error) {
       console.error(`Error saving ${key} to localStorage:`, error);
     }
   }, [key, storedValue]);
 
-  return [storedValue, setStoredValue];
+  return [storedValue, setValue];
 };
 
 export default useLocalStorage;
