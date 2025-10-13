@@ -178,7 +178,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 **Built with love and dedication to fitness**
 
-*BodyBloom - Where Progress Blooms* 🌱
+*BodyBloom - Where Progress Blooms* 
 
 </div>
 
