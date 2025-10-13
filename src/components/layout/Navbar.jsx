@@ -1,17 +1,17 @@
-import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 
 const Navbar = () => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/log', label: 'Log Workout' },
-    { path: '/history', label: 'History' },
-    { path: '/explore', label: 'Explore' },
-    { path: '/motivation', label: 'Motivation' },
-    { path: '/dashboard', label: 'Dashboard' },
+    { path: "/", label: "Home" },
+    { path: "/log", label: "Log Workout" },
+    { path: "/history", label: "History" },
+    { path: "/explore", label: "Explore" },
+    { path: "/motivation", label: "Motivation" },
+    { path: "/dashboard", label: "Dashboard" },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -34,10 +34,10 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${
                   isActive(link.path)
-                    ? 'bg-primary-50 text-primary-700'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? "bg-primary-50 text-primary-700"
+                    : "text-gray-900 hover:bg-gray-100 hover:text-primary-600"
                 }`}
               >
                 {link.label}
@@ -50,11 +50,26 @@ const Navbar = () => {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-50"
           >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               )}
             </svg>
           </button>
@@ -68,10 +83,10 @@ const Navbar = () => {
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                className={`block px-4 py-3 rounded-lg text-base font-bold transition-colors ${
                   isActive(link.path)
-                    ? 'bg-primary-50 text-primary-700'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? "bg-primary-50 text-primary-700"
+                    : "text-gray-900 hover:bg-gray-100 hover:text-primary-600"
                 }`}
               >
                 {link.label}
