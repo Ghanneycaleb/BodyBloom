@@ -1,5 +1,218 @@
-import { useState, useEffect } from "react";
-import { fetchExercises, searchExercises } from "../services/api";
+// import { useState, useEffect } from "react";
+// import { fetchExercises, searchExercises, fetchMuscles } from "../services/api";
+// import ExerciseCard from "../components/explore/ExerciseCard";
+// import Loader from "../components/common/Loader";
+// import Button from "../components/common/Button";
+
+// const Explore = () => {
+//   const [exercises, setExercises] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [searching, setSearching] = useState(false);
+//   const [page, setPage] = useState(0);
+//   const [hasMore, setHasMore] = useState(true);
+//   const [muscles, setMuscles] = useState([]);
+//   const [selectedMuscle, setSelectedMuscle] = useState("");
+
+//   const ITEMS_PER_PAGE = 20;
+
+//   // Load initial exercises
+//   useEffect(() => {
+//     loadExercises();
+//     fetchMuscles().then((data) => {
+//       // Sort muscles alphabetically
+//       setMuscles(data.sort((a, b) => a.name.localeCompare(b.name)));
+//     });
+//   }, []);
+
+//   const loadExercises = async (offset = 0) => {
+//     try {
+//       setLoading(true);
+//       setError(null);
+//       const data = await fetchExercises(ITEMS_PER_PAGE, offset);
+
+//       if (offset === 0) {
+//         setExercises(data.results);
+//       } else {
+//         setExercises((prev) => [...prev, ...data.results]);
+//       }
+
+//       setHasMore(data.next !== null);
+//       setLoading(false);
+//     } catch {
+//       setError("Failed to load exercises. Please try again.");
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleSearch = async (e) => {
+//     e.preventDefault();
+
+//     if (!searchQuery.trim() && !selectedMuscle) {
+//       loadExercises();
+//       return;
+//     }
+
+//     try {
+//       setSearching(true);
+//       setError(null);
+//       const data = await searchExercises({
+//         query: searchQuery.trim(),
+//         muscle: selectedMuscle,
+//       });
+//       setExercises(data.results);
+//       setHasMore(false); // Disable load more for search results
+//       setSearching(false);
+//     } catch {
+//       setError("Search failed. Please try again.");
+//       setSearching(false);
+//     }
+//   };
+
+//   const handleClearSearch = () => {
+//     setSearchQuery("");
+//     setSelectedMuscle("");
+//     setPage(0);
+//     loadExercises(0);
+//   };
+
+//   const handleLoadMore = () => {
+//     const nextPage = page + 1;
+//     setPage(nextPage);
+//     loadExercises(nextPage * ITEMS_PER_PAGE);
+//   };
+
+//   if (loading && page === 0) {
+//     return (
+//       <div className="flex items-center justify-center min-h-[400px]">
+//         <Loader size="lg" text="Loading exercises..." />
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div>
+//       {/* Header */}
+//       <div className="mb-8">
+//         <h1 className="text-3xl font-bold text-gray-900 mb-2">
+//           Explore Exercises
+//         </h1>
+//         <p className="text-gray-600">
+//           Discover new exercises to add to your workout routine
+//         </p>
+//       </div>
+
+//       {/* Search Bar */}
+//       <div className="mb-8">
+//         <form
+//           onSubmit={handleSearch}
+//           className="grid grid-cols-1 sm:grid-cols-3 gap-3"
+//         >
+//           <input
+//             type="text"
+//             value={searchQuery}
+//             onChange={(e) => setSearchQuery(e.target.value)}
+//             placeholder="Search exercises (e.g., bench press, squats)..."
+//             className="sm:col-span-2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
+//           />
+//           <select
+//             value={selectedMuscle}
+//             onChange={(e) => setSelectedMuscle(e.target.value)}
+//             className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition bg-white"
+//           >
+//             <option value="">All Muscle Groups</option>
+//             {muscles.map((muscle) => (
+//               <option key={muscle.id} value={muscle.id}>
+//                 {muscle.name}
+//               </option>
+//             ))}
+//           </select>
+//           <div className="sm:col-span-3 flex gap-3">
+//             <Button type="submit" variant="primary" disabled={searching}>
+//               {searching ? "Searching..." : "Search"}
+//             </Button>
+//             {(searchQuery || selectedMuscle) && (
+//               <Button
+//                 type="button"
+//                 variant="secondary"
+//                 onClick={handleClearSearch}
+//               >
+//                 Clear
+//               </Button>
+//             )}
+//           </div>
+//         </form>
+//       </div>
+
+//       {/* Error Message */}
+//       {error && (
+//         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+//           <p className="text-red-800">{error}</p>
+//         </div>
+//       )}
+
+//       {/* Exercise Grid */}
+//       {searching ? (
+//         <div className="flex items-center justify-center min-h-[400px]">
+//           <Loader size="lg" text="Searching..." />
+//         </div>
+//       ) : exercises.length > 0 ? (
+//         <>
+//           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+//             {exercises.map((exercise) => (
+//               <ExerciseCard key={exercise.id} exercise={exercise} />
+//             ))}
+//           </div>
+
+//           {/* Load More Button */}
+//           {hasMore && !searchQuery && (
+//             <div className="flex justify-center">
+//               <Button
+//                 onClick={handleLoadMore}
+//                 variant="secondary"
+//                 disabled={loading}
+//               >
+//                 {loading ? "Loading..." : "Load More Exercises"}
+//               </Button>
+//             </div>
+//           )}
+//         </>
+//       ) : (
+//         !loading && (
+//           <div className="text-center py-16">
+//             <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+//               <svg
+//                 className="w-12 h-12 text-gray-400"
+//                 fill="none"
+//                 viewBox="0 0 24 24"
+//                 stroke="currentColor"
+//               >
+//                 <path
+//                   strokeLinecap="round"
+//                   strokeLinejoin="round"
+//                   strokeWidth={2}
+//                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+//                 />
+//               </svg>
+//             </div>
+//             <h3 className="text-xl font-semibold text-gray-900 mb-2">
+//               No Exercises Found
+//             </h3>
+//             <p className="text-gray-600">
+//               Try a different search term or clear your search.
+//             </p>
+//           </div>
+//         )
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Explore;
+
+import { useState, useEffect, useCallback } from "react";
+import { fetchExercises, searchExercises, fetchMuscles } from "../services/api";
 import ExerciseCard from "../components/explore/ExerciseCard";
 import Loader from "../components/common/Loader";
 import Button from "../components/common/Button";
@@ -12,13 +225,48 @@ const Explore = () => {
   const [searching, setSearching] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [muscles, setMuscles] = useState([]);
+  const [selectedMuscle, setSelectedMuscle] = useState("");
 
   const ITEMS_PER_PAGE = 20;
 
-  // Load initial exercises
+  // Load initial exercises and muscles
   useEffect(() => {
-    loadExercises();
+    loadExercises(0);
+    // fetch muscles only once
+    if (muscles.length === 0) {
+      fetchMuscles()
+        .then((data) => {
+          // Sort muscles alphabetically by name
+          const sorted = (data || [])
+            .slice()
+            .sort((a, b) => a.name.localeCompare(b.name));
+          setMuscles(sorted);
+        })
+        .catch((err) => {
+          console.error("Failed to load muscles:", err);
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Debounced search effect
+  useEffect(() => {
+    // Don't run on initial mount
+    if (loading && page === 0) {
+      return;
+    }
+
+    const handler = setTimeout(() => {
+      // Trigger a search when query or muscle changes
+      handleSearch();
+    }, 500); // 500ms delay
+
+    return () => {
+      clearTimeout(handler);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, selectedMuscle]);
 
   const loadExercises = async (offset = 0) => {
     try {
@@ -26,13 +274,24 @@ const Explore = () => {
       setError(null);
       const data = await fetchExercises(ITEMS_PER_PAGE, offset);
 
+      // parseJson in API returns results array already if paginated
       if (offset === 0) {
-        setExercises(data.results);
+        setExercises(Array.isArray(data) ? data : data.results || []);
       } else {
-        setExercises((prev) => [...prev, ...data.results]);
+        setExercises((prev) => [
+          ...prev,
+          ...(Array.isArray(data) ? data : data.results || []),
+        ]);
       }
 
-      setHasMore(data.next !== null);
+      // If API returns { next: ... } we detect hasMore, otherwise fallback to whether results length == page size
+      setHasMore(
+        data.next !== undefined
+          ? data.next !== null
+          : Array.isArray(data)
+          ? data.length === ITEMS_PER_PAGE
+          : (data.results || []).length === ITEMS_PER_PAGE
+      );
       setLoading(false);
     } catch {
       setError("Failed to load exercises. Please try again.");
@@ -40,40 +299,70 @@ const Explore = () => {
     }
   };
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-
-    if (!searchQuery.trim()) {
-      loadExercises();
+  // Using useCallback to memoize the search function
+  const handleSearch = useCallback(async () => {
+    // if no query and no muscle selected, reload initial list
+    if (!searchQuery.trim() && !selectedMuscle) {
+      setLoading(true);
+      setPage(0);
+      loadExercises(0);
       return;
     }
 
     try {
       setSearching(true);
       setError(null);
-      const data = await searchExercises(searchQuery);
-      setExercises(data.results);
-      setHasMore(false); // Disable load more for search results
+      setLoading(true); // Set loading to true before search
+      // call searchExercises with the proper param object
+      const data = await searchExercises({
+        query: searchQuery.trim() || undefined,
+        muscle: selectedMuscle || undefined,
+      });
+
+      const results = Array.isArray(data) ? data : data.results || [];
+      setExercises(results);
+
+      // If the search returns paginated results, allow 'load more' accordingly
+      setHasMore(
+        data.next !== undefined
+          ? data.next !== null
+          : results.length === ITEMS_PER_PAGE
+      );
+
       setSearching(false);
+      setLoading(false);
+      setPage(0);
     } catch {
       setError("Search failed. Please try again.");
       setSearching(false);
+      setLoading(false);
     }
+  }, [searchQuery, selectedMuscle]);
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    // Immediately trigger search on form submit (e.g., pressing Enter)
+    // This cancels any pending debounced search
+    handleSearch();
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    setSelectedMuscle("");
+    setLoading(true);
+    setPage(0);
+    loadExercises(0);
   };
 
   const handleLoadMore = () => {
     const nextPage = page + 1;
     setPage(nextPage);
-    loadExercises(nextPage * ITEMS_PER_PAGE);
+    // If currently in a search state, attempt to load more via fetchExercises (search pagination could be added if needed)
+    const offset = nextPage * ITEMS_PER_PAGE;
+    loadExercises(offset);
   };
 
-  const handleClearSearch = () => {
-    setSearchQuery("");
-    setPage(0);
-    loadExercises(0);
-  };
-
-  if (loading && exercises.length === 0) {
+  if (loading && page === 0) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader size="lg" text="Loading exercises..." />
@@ -82,99 +371,120 @@ const Explore = () => {
   }
 
   return (
-    <div>
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Explore Exercises
-        </h1>
-        <p className="text-gray-600">
-          Discover new exercises to add to your workout routine
-        </p>
-      </div>
-
-      {/* Search Bar */}
-      <div className="mb-8">
-        <form onSubmit={handleSearch} className="flex gap-3">
+    <div className="bg-gray-50 min-h-screen py-8 sm:py-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+            Explore Exercises
+          </h1>
+          <p className="text-gray-600 text-base sm:text-lg">
+            Discover new exercises to add to your workout routine.
+          </p>
+        </div>
+        <form
+          onSubmit={handleFormSubmit}
+          className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-3"
+        >
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search exercises (e.g., bench press, squats)..."
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
+            className="sm:col-span-2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
           />
-          <Button type="submit" variant="primary" disabled={searching}>
-            {searching ? "Searching..." : "Search"}
-          </Button>
-          {searchQuery && (
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={handleClearSearch}
-            >
-              Clear
-            </Button>
-          )}
-        </form>
-      </div>
-
-      {/* Error Message */}
-      {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-800">{error}</p>
-        </div>
-      )}
-
-      {/* Exercise Grid */}
-      {exercises.length > 0 ? (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {exercises.map((exercise) => (
-              <ExerciseCard key={exercise.id} exercise={exercise} />
+          <select
+            value={selectedMuscle}
+            onChange={(e) => setSelectedMuscle(e.target.value)}
+            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition bg-white"
+          >
+            <option value="">All Muscle Groups</option>
+            {muscles.map((muscle) => (
+              <option key={muscle.id} value={muscle.id}>
+                {muscle.name}
+              </option>
             ))}
-          </div>
+          </select>
 
-          {/* Load More Button */}
-          {hasMore && !searchQuery && (
-            <div className="flex justify-center">
+          <div className="sm:col-span-3 flex gap-3">
+            <Button type="submit" variant="primary" disabled={searching}>
+              {searching ? "Searching..." : "Search"}
+            </Button>
+            {(searchQuery || selectedMuscle) && (
               <Button
-                onClick={handleLoadMore}
+                type="button"
                 variant="secondary"
-                disabled={loading}
+                onClick={handleClearSearch}
               >
-                {loading ? "Loading..." : "Load More Exercises"}
+                Clear
               </Button>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="text-center py-16">
-          <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-            <svg
-              className="w-12 h-12 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
+            )}
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            No Exercises Found
-          </h3>
-          <p className="text-gray-600">
-            Try a different search term or clear your search.
-          </p>
-        </div>
-      )}
+        </form>
+
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-800">{error}</p>
+          </div>
+        )}
+
+        {/* Exercise Grid / Loading / Empty */}
+        {searching ? (
+          <div className="flex items-center justify-center min-h-[400px]">
+            <Loader size="lg" text="Searching..." />
+          </div>
+        ) : exercises && exercises.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              {exercises.map((exercise) => (
+                <ExerciseCard key={exercise.id} exercise={exercise} />
+              ))}
+            </div>
+
+            {/* Load More Button */}
+            {hasMore && !searchQuery && (
+              <div className="flex justify-center">
+                <Button
+                  onClick={handleLoadMore}
+                  variant="secondary"
+                  disabled={loading}
+                >
+                  {loading ? "Loading..." : "Load More Exercises"}
+                </Button>
+              </div>
+            )}
+          </>
+        ) : (
+          !loading && (
+            <div className="text-center py-16">
+              <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                <svg
+                  className="w-12 h-12 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                No Exercises Found
+              </h3>
+              <p className="text-gray-600">
+                Try a different search term or clear your search.
+              </p>
+            </div>
+          )
+        )}
+      </div>
     </div>
   );
 };
 
 export default Explore;
-
