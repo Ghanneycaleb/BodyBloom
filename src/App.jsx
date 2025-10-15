@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import Home from './pages/Home';
 import LogWorkout from './pages/LogWorkout';
 import History from './pages/History';
@@ -9,18 +10,20 @@ import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/log" element={<LogWorkout />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/motivation" element={<Motivation />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/log" element={<LogWorkout />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/motivation" element={<Motivation />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </ErrorBoundary>
   );
 }
 

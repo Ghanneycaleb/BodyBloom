@@ -9,7 +9,6 @@ const Explore = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searching, setSearching] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [muscles, setMuscles] = useState([]);
@@ -37,24 +36,6 @@ const Explore = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Debounced search effect
-  useEffect(() => {
-    // Don't run on initial mount
-    if (loading && page === 0) {
-      return;
-    }
-
-    const handler = setTimeout(() => {
-      // Trigger a search when query or muscle changes
-      handleSearch();
-    }, 500); // 500ms delay
-
-    return () => {
-      clearTimeout(handler);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, selectedMuscle]);
-
   const loadExercises = async (offset = 0) => {
     try {
       setLoading(true);
@@ -80,8 +61,10 @@ const Explore = () => {
           : (data.results || []).length === ITEMS_PER_PAGE
       );
       setLoading(false);
-    } catch {
-      setError("Failed to load exercises. Please try again.");
+    } catch (err) {
+      const message =
+        err.message || "Failed to load exercises. Please try again.";
+      setError(message);
       setLoading(false);
     }
   };
@@ -97,12 +80,12 @@ const Explore = () => {
     }
 
     try {
-      setSearching(true);
       setError(null);
-      setLoading(true); // Set loading to true before search
+      setLoading(true);
+      setPage(0); // Reset page for new search
       // call searchExercises with the proper param object
       const data = await searchExercises({
-        query: searchQuery.trim() || undefined,
+        search: searchQuery.trim() || undefined,
         muscle: selectedMuscle || undefined,
       });
 
@@ -116,12 +99,10 @@ const Explore = () => {
           : results.length === ITEMS_PER_PAGE
       );
 
-      setSearching(false);
       setLoading(false);
-      setPage(0);
-    } catch {
-      setError("Search failed. Please try again.");
-      setSearching(false);
+    } catch (err) {
+      const message = err.message || "Search failed. Please try again.";
+      setError(message);
       setLoading(false);
     }
   }, [searchQuery, selectedMuscle]);
@@ -141,12 +122,22 @@ const Explore = () => {
     loadExercises(0);
   };
 
+  const handleRetry = () => {
+    setPage(0);
+    loadExercises(0);
+  };
+
   const handleLoadMore = () => {
     const nextPage = page + 1;
-    setPage(nextPage);
-    // If currently in a search state, attempt to load more via fetchExercises (search pagination could be added if needed)
     const offset = nextPage * ITEMS_PER_PAGE;
-    loadExercises(offset);
+    setPage(nextPage);
+
+    if (searchQuery.trim() || selectedMuscle) {
+      // If searching, load more search results
+      loadMoreSearchResults(offset);
+    } else {
+      loadExercises(offset);
+    }
   };
 
   if (loading && page === 0) {
@@ -156,6 +147,29 @@ const Explore = () => {
       </div>
     );
   }
+
+  const loadMoreSearchResults = async (offset) => {
+    setLoading(true);
+    try {
+      const data = await searchExercises({
+        search: searchQuery.trim() || undefined,
+        muscle: selectedMuscle || undefined,
+        offset: offset,
+      });
+      const newExercises = Array.isArray(data) ? data : data.results || [];
+      setExercises((prev) => [...prev, ...newExercises]);
+      setHasMore(
+        data.next !== undefined
+          ? data.next !== null
+          : newExercises.length === ITEMS_PER_PAGE
+      );
+    } catch (err) {
+      const message = err.message || "Failed to load more results.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -193,8 +207,8 @@ const Explore = () => {
         </select>
 
         <div className="sm:col-span-3 flex gap-3">
-          <Button type="submit" variant="primary" disabled={searching}>
-            {searching ? "Searching..." : "Search"}
+          <Button type="submit" variant="primary" disabled={loading}>
+            {loading && page === 0 ? "Searching..." : "Search"}
           </Button>
           {(searchQuery || selectedMuscle) && (
             <Button
@@ -211,16 +225,16 @@ const Explore = () => {
       {/* Error Message */}
       {error && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-800">{error}</p>
+          <p className="text-red-800 font-semibold">An error occurred:</p>
+          <p className="text-red-700 mt-1">{error}</p>
+          <Button onClick={handleRetry} className="mt-4">
+            Retry
+          </Button>
         </div>
       )}
 
       {/* Exercise Grid / Loading / Empty */}
-      {searching ? (
-        <div className="flex items-center justify-center min-h-[400px]">
-          <Loader size="lg" text="Searching..." />
-        </div>
-      ) : exercises && exercises.length > 0 ? (
+      {exercises && exercises.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {exercises.map((exercise) => (
@@ -229,7 +243,7 @@ const Explore = () => {
           </div>
 
           {/* Load More Button */}
-          {hasMore && !searchQuery && (
+          {hasMore && (
             <div className="flex justify-center">
               <Button
                 onClick={handleLoadMore}

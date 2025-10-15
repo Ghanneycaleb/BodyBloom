@@ -1,4 +1,22 @@
 const WGER_BASE_URL = "https://wger.de/api/v2";
+const FETCH_TIMEOUT = 8000; // 8 seconds
+
+/**
+ * A wrapper for fetch that includes a timeout.
+ * @param {string} resource - The URL to fetch.
+ * @param {object} options - Fetch options.
+ * @returns {Promise<Response>}
+ */
+const fetchWithTimeout = async (resource, options = {}) => {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+  const response = await fetch(resource, {
+    ...options,
+    signal: controller.signal,
+  });
+  clearTimeout(id);
+  return response;
+};
 
 /**
  * Helper that normalizes JSON responses (paginated or not)
@@ -17,17 +35,21 @@ const parseJson = async (response) => {
  */
 export const fetchExercises = async (limit = 20, offset = 0) => {
   try {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `${WGER_BASE_URL}/exercise/?language=2&limit=${limit}&offset=${offset}`
     );
 
     if (!response.ok) {
-      if (response.status === 429) throw new Error("Too many requests. Try again later.");
+      if (response.status === 429)
+        throw new Error("Too many requests. Try again later.");
       throw new Error("Failed to fetch exercises");
     }
 
     return await parseJson(response);
   } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Request timed out. The server is not responding.");
+    }
     console.error("Error fetching exercises:", error);
     throw error;
   }
@@ -38,7 +60,9 @@ export const fetchExercises = async (limit = 20, offset = 0) => {
  */
 export const fetchCategories = async () => {
   try {
-    const response = await fetch(`${WGER_BASE_URL}/exercisecategory/`);
+    const response = await fetchWithTimeout(
+      `${WGER_BASE_URL}/exercisecategory/`
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch categories");
@@ -46,6 +70,9 @@ export const fetchCategories = async () => {
 
     return await parseJson(response);
   } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Request timed out. The server is not responding.");
+    }
     console.error("Error fetching categories:", error);
     throw error;
   }
@@ -56,7 +83,7 @@ export const fetchCategories = async () => {
  */
 export const fetchExercisesByCategory = async (categoryId) => {
   try {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `${WGER_BASE_URL}/exercise/?language=2&category=${categoryId}`
     );
 
@@ -66,6 +93,9 @@ export const fetchExercisesByCategory = async (categoryId) => {
 
     return await parseJson(response);
   } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Request timed out. The server is not responding.");
+    }
     console.error("Error fetching exercises by category:", error);
     throw error;
   }
@@ -76,7 +106,7 @@ export const fetchExercisesByCategory = async (categoryId) => {
  */
 export const fetchEquipment = async () => {
   try {
-    const response = await fetch(`${WGER_BASE_URL}/equipment/`);
+    const response = await fetchWithTimeout(`${WGER_BASE_URL}/equipment/`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch equipment");
@@ -84,6 +114,9 @@ export const fetchEquipment = async () => {
 
     return await parseJson(response);
   } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Request timed out. The server is not responding.");
+    }
     console.error("Error fetching equipment:", error);
     throw error;
   }
@@ -107,15 +140,19 @@ export const searchExercises = async ({ query, muscle } = {}) => {
       url.searchParams.append("muscles", muscle);
     }
 
-    const response = await fetch(url.toString());
+    const response = await fetchWithTimeout(url.toString());
 
     if (!response.ok) {
-      if (response.status === 429) throw new Error("Too many requests. Try again later.");
+      if (response.status === 429)
+        throw new Error("Too many requests. Try again later.");
       throw new Error("Failed to search exercises");
     }
 
     return await parseJson(response);
   } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Request timed out. The server is not responding.");
+    }
     console.error("Error searching exercises:", error);
     throw error;
   }
@@ -126,13 +163,14 @@ export const searchExercises = async ({ query, muscle } = {}) => {
  */
 export const fetchExerciseInfo = async (exerciseId, signal) => {
   try {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `${WGER_BASE_URL}/exerciseinfo/${exerciseId}/`,
       { signal }
     );
 
     if (!response.ok) {
-      if (response.status === 429) throw new Error("Too many requests. Try again later.");
+      if (response.status === 429)
+        throw new Error("Too many requests. Try again later.");
       throw new Error("Failed to fetch exercise info");
     }
 
@@ -140,6 +178,9 @@ export const fetchExerciseInfo = async (exerciseId, signal) => {
   } catch (error) {
     // If fetch was aborted, let the caller handle it (no console.error)
     if (error.name === "AbortError") throw error;
+    if (error.name === "AbortError") {
+      throw new Error("Request timed out. The server is not responding.");
+    }
     console.error("Error fetching exercise info:", error);
     throw error;
   }
@@ -150,7 +191,7 @@ export const fetchExerciseInfo = async (exerciseId, signal) => {
  */
 export const fetchMuscles = async () => {
   try {
-    const response = await fetch(`${WGER_BASE_URL}/muscle/`);
+    const response = await fetchWithTimeout(`${WGER_BASE_URL}/muscle/`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch muscles");
@@ -159,6 +200,9 @@ export const fetchMuscles = async () => {
     const data = await response.json();
     return data.results || [];
   } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Request timed out. The server is not responding.");
+    }
     console.error("Error fetching muscles:", error);
     throw error;
   }
