@@ -37,12 +37,12 @@ const Home = () => {
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center text-center py-24 px-4 bg-gradient-to-b from-white to-indigo-50 scroll-smooth">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6">
-          <span className="text-gray-900">Welcome to </span>
-          <span className="text-primary-600">BodyBloom</span>
+          <span className="text-gray-900 animate-fade-in">Welcome to </span>
+          <span className="text-primary-600 animate-fade-in delay-100">BodyBloom</span>
           {/* Use inline-block and vertical alignment for the icon */}
           <Sparkle className="w-8 h-8 text-primary-600 animate-spin-pulse inline-block align-middle ml-2" />
         </h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-in delay-200">
           Where your fitness journey blooms — track, train, and transform with
           ease.
         </p>
@@ -50,7 +50,7 @@ const Home = () => {
           <Link to="/log">
             <Button
               variant="primary"
-              className="w-full sm:w-auto transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1"
+              className="w-full sm:w-auto transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 hover:animate-bounce-smooth"
             >
               Start Logging Workouts
             </Button>
@@ -58,7 +58,7 @@ const Home = () => {
           <Link to="/dashboard">
             <Button
               variant="secondary"
-              className="w-full sm:w-auto transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1"
+              className="w-full sm:w-auto transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 hover:animate-bounce-smooth"
             >
               View Dashboard
             </Button>
@@ -71,7 +71,7 @@ const Home = () => {
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
           Everything You Need to Succeed
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 stagger-children">
           {features.map((feature, index) => (
             <Link key={index} to={feature.link} className="block h-full">
               <Card className="h-full transition-all duration-500 ease-out hover:border-primary-500 hover:shadow-xl hover:-translate-y-2 cursor-pointer">
