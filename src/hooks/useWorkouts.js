@@ -1,7 +1,7 @@
 import useLocalStorage from "./useLocalStorage";
 
 const useWorkouts = () => {
-  const [workouts, setWorkouts] = useLocalStorage("workouts", []);
+  const [workouts, setWorkouts, loading] = useLocalStorage("workouts", []);
 
   const addWorkout = (workout) => {
     setWorkouts((prevWorkouts) => [
@@ -35,6 +35,7 @@ const useWorkouts = () => {
 
   return {
     workouts,
+    loading,
     addWorkout,
     deleteWorkout,
     clearAllWorkouts,
