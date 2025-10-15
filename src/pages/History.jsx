@@ -54,14 +54,13 @@ const History = () => {
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen py-8 sm:py-12">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div>
         {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Workout History
           </h1>
-          <p className="text-gray-600 text-base sm:text-lg">
+        <p className="text-gray-600">
             Review your past workouts and track your consistency.
           </p>
         </div>
@@ -123,7 +122,6 @@ const History = () => {
           workoutsByDate={filteredWorkouts}
           onDelete={deleteWorkout}
         />
-      </div>
 
       {/* Delete Confirmation Modal */}
       <Modal
