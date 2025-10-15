@@ -2,20 +2,11 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import useWorkouts from "../hooks/useWorkouts";
 import StatsCard from "../components/dashboard/StatsCard";
+import ProgressChart from "../components/dashboard/ProgressChart";
 import Card from "../components/common/Card";
+import { Dumbbell, Flame, Zap, Weight, PartyPopper } from "lucide-react";
 import Button from "../components/common/Button";
 import { getWorkoutStreak, daysBetween } from "../utils/helpers";
-import {
-  BarChart,
-  Dumbbell,
-  Flame,
-  Zap,
-  Weight,
-  PartyPopper,
-  ListChecks,
-  Timer,
-  CalendarClock,
-} from "lucide-react";
 
 const Dashboard = () => {
   const { workouts } = useWorkouts();
@@ -23,15 +14,14 @@ const Dashboard = () => {
   // Calculate stats
   const stats = useMemo(() => {
     const totalWorkouts = workouts.length;
-    const today = new Date();
-    const oneWeekAgo = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() - 7
-    );
+    const now = new Date();
+    const oneWeekAgo = new Date(now);
+    oneWeekAgo.setDate(now.getDate() - 7);
+
     const thisWeek = workouts.filter(
-      (w) => new Date(w.date) > oneWeekAgo
+      (w) => new Date(w.date) >= oneWeekAgo
     ).length;
+
     const totalVolume = workouts.reduce(
       (sum, w) => sum + (w.totalVolume || 0),
       0
@@ -86,63 +76,36 @@ const Dashboard = () => {
 
   if (workouts.length === 0) {
     return (
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Welcome to your Dashboard!
-          </h1>
-          <p className="text-lg text-gray-600">
-            This is where your fitness journey comes to life. Let's get started.
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">
+          Progress Dashboard
+        </h1>
+        <Card className="text-center py-16">
+          <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+            <svg
+              className="w-12 h-12 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            No Data Yet
+          </h3>
+          <p className="text-gray-600 mb-6">
+            Start logging workouts to see your progress and analytics!
           </p>
-        </div>
-
-        {/* Getting Started Guide */}
-        <div className="max-w-4xl mx-auto">
-          <Card className="bg-white border-gray-200 shadow-sm">
-            <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                How to Begin Your Journey
-              </h2>
-              <ol className="list-decimal list-inside space-y-4 text-gray-700">
-                <li>
-                  <span className="font-semibold text-gray-800">
-                    Log Your First Workout:
-                  </span>{" "}
-                  Click the button below to head to the logging page and record
-                  your first session.
-                </li>
-                <li>
-                  <span className="font-semibold text-gray-800">
-                    Explore New Exercises:
-                  </span>{" "}
-                  Not sure where to start? Visit the{" "}
-                  <Link
-                    to="/explore"
-                    className="text-primary-600 hover:underline"
-                  >
-                    Explore
-                  </Link>{" "}
-                  page to find exercises for any muscle group.
-                </li>
-                <li>
-                  <span className="font-semibold text-gray-800">
-                    Watch Your Progress Bloom:
-                  </span>{" "}
-                  As you log workouts, this dashboard will fill up with charts
-                  and stats celebrating your achievements.
-                </li>
-              </ol>
-              <div className="mt-6">
-                <Link to="/log">
-                  <Button variant="primary" size="lg">
-                    Log Your First Workout
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </Card>
-        </div>
+          <Link to="/log">
+            <Button variant="primary">Log Your First Workout</Button>
+          </Link>
+        </Card>
       </div>
     );
   }
@@ -155,7 +118,7 @@ const Dashboard = () => {
           Progress Dashboard
         </h1>
         <p className="text-gray-600">
-          Track your fitness journey and celebrate your achievements.
+          Track your fitness journey and celebrate your achievements
         </p>
       </div>
 
@@ -165,7 +128,7 @@ const Dashboard = () => {
           title="Total Workouts"
           value={stats.totalWorkouts}
           subtitle="All time"
-          Icon={Dumbbell}
+          icon={<Dumbbell className="w-8 h-8" />}
           color="primary"
         />
         <StatsCard
@@ -174,62 +137,61 @@ const Dashboard = () => {
           subtitle={`${stats.thisWeek} ${
             stats.thisWeek === 1 ? "workout" : "workouts"
           }`}
-          Icon={Flame}
+          icon={<Flame className="w-8 h-8" />}
           color="blue"
         />
         <StatsCard
           title="Current Streak"
           value={`${stats.streak} ${stats.streak === 1 ? "day" : "days"}`}
           subtitle="Keep it up!"
-          Icon={Zap}
+          icon={<Zap className="w-8 h-8" />}
           color="purple"
         />
         <StatsCard
           title="Total Volume"
           value={`${stats.totalVolume.toFixed(0)} kg`}
           subtitle="Weight lifted"
-          Icon={Weight}
-          color="orange"
+          icon={<Weight className="w-8 h-8" />}
+          color="primary"
         />
       </div>
 
       {/* Secondary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <Card className="flex flex-col items-center justify-center text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 text-primary-600 mb-3">
-            <ListChecks className="h-6 w-6" />
-          </div>
-          <div>
-            <p className="text-3xl font-bold text-gray-900">
+        <Card>
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-1">Total Exercises</p>
+            <p className="text-3xl font-bold text-primary-600">
               {stats.totalExercises}
             </p>
-            <p className="text-sm text-gray-600">Total Exercises</p>
+            <p className="text-xs text-gray-500 mt-1">Logged exercises</p>
           </div>
         </Card>
-        <Card className="flex flex-col items-center justify-center text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600 mb-3">
-            <Timer className="h-6 w-6" />
-          </div>
-          <div>
-            <p className="text-3xl font-bold text-gray-900">
+        <Card>
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-1">Avg. Duration</p>
+            <p className="text-3xl font-bold text-primary-600">
               {stats.avgDuration} min
             </p>
-            <p className="text-sm text-gray-600">Avg. Duration</p>
+            <p className="text-xs text-gray-500 mt-1">Per workout</p>
           </div>
         </Card>
-        <Card className="flex flex-col items-center justify-center text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 text-purple-600 mb-3">
-            <CalendarClock className="h-6 w-6" />
-          </div>
-          <div>
-            <p className="text-3xl font-bold text-gray-900">
+        <Card>
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-1">Last Workout</p>
+            <p className="text-3xl font-bold text-primary-600">
               {workouts.length > 0
                 ? daysBetween(new Date(workouts[0].date), new Date())
                 : 0}
             </p>
-            <p className="text-sm text-gray-600">Days Since Last Workout</p>
+            <p className="text-xs text-gray-500 mt-1">Days ago</p>
           </div>
         </Card>
+      </div>
+
+      {/* Progress Chart */}
+      <div className="mb-8">
+        <ProgressChart workouts={workouts} />
       </div>
 
       {/* Two Column Layout */}
@@ -276,7 +238,7 @@ const Dashboard = () => {
                   className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="flex items-center justify-center w-8 h-8 bg-gray-200 text-gray-600 rounded-full text-sm font-semibold">
+                    <span className="flex items-center justify-center w-8 h-8 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold">
                       {index + 1}
                     </span>
                     <span className="font-medium text-gray-900">
@@ -301,7 +263,8 @@ const Dashboard = () => {
       <Card className="mt-8 bg-gradient-to-r from-primary-600 to-primary-700 border-none text-white">
         <div className="text-center py-8">
           <h2 className="text-2xl font-bold mb-2 flex items-center justify-center gap-2">
-            Keep Up the Great Work! <PartyPopper className="inline-block" />
+            Keep Up the Great Work!
+            <PartyPopper className="w-7 h-7" />
           </h2>
           <p className="text-primary-100 mb-6">
             You've logged {stats.totalWorkouts}{" "}
