@@ -86,24 +86,63 @@ const Dashboard = () => {
 
   if (workouts.length === 0) {
     return (
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Progress Dashboard
-        </h1>
-        <Card className="text-center py-16">
-          <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-            <BarChart className="w-12 h-12 text-gray-400" strokeWidth={1.5} />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            No Data Yet
-          </h3>
-          <p className="text-gray-600 mb-6">
-            Start logging workouts to see your progress and analytics!
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            Welcome to your Dashboard!
+          </h1>
+          <p className="text-lg text-gray-600">
+            This is where your fitness journey comes to life. Let's get started.
           </p>
-          <Link to="/log">
-            <Button variant="primary">Log Your First Workout</Button>
-          </Link>
-        </Card>
+        </div>
+
+        {/* Getting Started Guide */}
+        <div className="max-w-4xl mx-auto">
+          <Card className="bg-white border-gray-200 shadow-sm">
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                How to Begin Your Journey
+              </h2>
+              <ol className="list-decimal list-inside space-y-4 text-gray-700">
+                <li>
+                  <span className="font-semibold text-gray-800">
+                    Log Your First Workout:
+                  </span>{" "}
+                  Click the button below to head to the logging page and record
+                  your first session.
+                </li>
+                <li>
+                  <span className="font-semibold text-gray-800">
+                    Explore New Exercises:
+                  </span>{" "}
+                  Not sure where to start? Visit the{" "}
+                  <Link
+                    to="/explore"
+                    className="text-primary-600 hover:underline"
+                  >
+                    Explore
+                  </Link>{" "}
+                  page to find exercises for any muscle group.
+                </li>
+                <li>
+                  <span className="font-semibold text-gray-800">
+                    Watch Your Progress Bloom:
+                  </span>{" "}
+                  As you log workouts, this dashboard will fill up with charts
+                  and stats celebrating your achievements.
+                </li>
+              </ol>
+              <div className="mt-6">
+                <Link to="/log">
+                  <Button variant="primary" size="lg">
+                    Log Your First Workout
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -116,7 +155,7 @@ const Dashboard = () => {
           Progress Dashboard
         </h1>
         <p className="text-gray-600">
-          Track your fitness journey and celebrate your achievements
+          Track your fitness journey and celebrate your achievements.
         </p>
       </div>
 
