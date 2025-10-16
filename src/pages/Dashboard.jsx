@@ -9,7 +9,7 @@ import Button from "../components/common/Button";
 import { getWorkoutStreak, daysBetween } from "../utils/helpers";
 
 const Dashboard = () => {
-  const { workouts } = useWorkouts();
+  const { workouts, loading } = useWorkouts(); // Assuming useWorkouts returns a loading state
 
   // Calculate stats
   const stats = useMemo(() => {
@@ -74,13 +74,48 @@ const Dashboard = () => {
       .map(([name, count]) => ({ name, count }));
   }, [workouts]);
 
+  // Loading State Skeleton
+  if (loading) {
+    return (
+      <div>
+        <div className="mb-8">
+          <div className="h-8 bg-gray-200 rounded-md w-1/3 animate-pulse mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded-md w-1/2 animate-pulse"></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {[...Array(4)].map((_, i) => (
+            <div
+              key={i}
+              className="h-32 bg-gray-200 rounded-xl animate-pulse"
+            ></div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {[...Array(3)].map((_, i) => (
+            <div
+              key={i}
+              className="h-24 bg-gray-200 rounded-xl animate-pulse"
+            ></div>
+          ))}
+        </div>
+        <div className="mb-8">
+          <div className="h-80 bg-gray-200 rounded-xl animate-pulse"></div>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="h-64 bg-gray-200 rounded-xl animate-pulse"></div>
+          <div className="h-64 bg-gray-200 rounded-xl animate-pulse"></div>
+        </div>
+      </div>
+    );
+  }
+
   if (workouts.length === 0) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
+        <h1 className="text-3xl font-bold text-gray-900  mb-8">
           Progress Dashboard
         </h1>
-        <Card className="text-center py-16">
+        <Card className="text-center py-16 bg-white ">
           <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
             <svg
               className="w-12 h-12 text-gray-400"
@@ -96,10 +131,10 @@ const Dashboard = () => {
               />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          <h3 className="text-xl font-semibold text-gray-900  mb-2">
             No Data Yet
           </h3>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600  mb-6">
             Start logging workouts to see your progress and analytics!
           </p>
           <Link to="/log">
@@ -114,10 +149,10 @@ const Dashboard = () => {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-gray-900  mb-2">
           Progress Dashboard
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 ">
           Track your fitness journey and celebrate your achievements
         </p>
       </div>
@@ -160,7 +195,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card>
           <div className="text-center">
-            <p className="text-sm text-gray-600 mb-1">Total Exercises</p>
+            <p className="text-sm text-gray-600  mb-1">Total Exercises</p>
             <p className="text-3xl font-bold text-primary-600">
               {stats.totalExercises}
             </p>
@@ -169,7 +204,7 @@ const Dashboard = () => {
         </Card>
         <Card>
           <div className="text-center">
-            <p className="text-sm text-gray-600 mb-1">Avg. Duration</p>
+            <p className="text-sm text-gray-600  mb-1">Avg. Duration</p>
             <p className="text-3xl font-bold text-primary-600">
               {stats.avgDuration} min
             </p>
@@ -178,7 +213,7 @@ const Dashboard = () => {
         </Card>
         <Card>
           <div className="text-center">
-            <p className="text-sm text-gray-600 mb-1">Last Workout</p>
+            <p className="text-sm text-gray-600  mb-1">Last Workout</p>
             <p className="text-3xl font-bold text-primary-600">
               {workouts.length > 0
                 ? daysBetween(new Date(workouts[0].date), new Date())
@@ -199,7 +234,9 @@ const Dashboard = () => {
         {/* Recent Workouts */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Recent Workouts</h2>
+            <h2 className="text-xl font-bold text-gray-900 ">
+              Recent Workouts
+            </h2>
             <Link to="/history">
               <Button variant="outline" className="text-sm">
                 View All
@@ -210,13 +247,12 @@ const Dashboard = () => {
             {recentWorkouts.map((workout) => (
               <div
                 key={workout.id}
-                className="p-3 bg-gray-50 rounded-lg border border-gray-200"
+                className="p-3 bg-gray-50  rounded-lg border border-gray-200"
               >
-                <h4 className="font-medium text-gray-900">{workout.name}</h4>
+                <h4 className="font-medium text-gray-900 ">{workout.name}</h4>
                 <div className="flex items-center gap-3 mt-1 text-sm text-gray-600">
                   <span>{workout.exercises?.length} exercises</span>
                   <span>•</span>
-                  <span>{workout.duration} min</span>
                   <span>•</span>
                   <span>{new Date(workout.date).toLocaleDateString()}</span>
                 </div>
@@ -227,7 +263,7 @@ const Dashboard = () => {
 
         {/* Top Exercises */}
         <Card>
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <h2 className="text-xl font-bold text-gray-900  mb-4">
             Most Performed Exercises
           </h2>
           {topExercises.length > 0 ? (
@@ -235,7 +271,7 @@ const Dashboard = () => {
               {topExercises.map((exercise, index) => (
                 <div
                   key={exercise.name}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-3 bg-gray-50  rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <span className="flex items-center justify-center w-8 h-8 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold">
@@ -252,8 +288,8 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
-            <p className="text-gray-600 text-center py-8">
-              No exercise data yet
+            <p className="text-center text-gray-500 py-4">
+              No exercise data yet.
             </p>
           )}
         </Card>

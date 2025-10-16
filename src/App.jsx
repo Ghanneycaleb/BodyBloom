@@ -1,12 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './components/layout/Layout';
-import ErrorBoundary from './components/common/ErrorBoundary';
-import Home from './pages/Home';
-import LogWorkout from './pages/LogWorkout';
-import History from './pages/History';
-import Explore from './pages/Explore';
-import Motivation from './pages/Motivation';
-import Dashboard from './pages/Dashboard';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import ErrorBoundary from "./components/common/ErrorBoundary";
+import Home from "./pages/Home";
+import LogWorkout from "./pages/LogWorkout";
+import History from "./pages/History";
+import Explore from "./pages/Explore";
+import Motivation from "./pages/Motivation";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
