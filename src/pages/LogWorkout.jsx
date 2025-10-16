@@ -1,22 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import WorkoutForm from "../components/workout/WorkoutForm";
 import useWorkouts from "../hooks/useWorkouts";
+import Button from "../components/common/Button";
 
 const LogWorkout = () => {
   const navigate = useNavigate();
   const { addWorkout } = useWorkouts();
   const [showSuccess, setShowSuccess] = useState(false);
+  const timeoutRef = useRef(null);
 
   const handleSaveWorkout = (workout) => {
     addWorkout(workout);
     setShowSuccess(true);
 
     // Show success message then navigate
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       navigate("/history");
     }, 1500);
   };
+
+  const handleLogAnother = () => {
+    setShowSuccess(false);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+  };
+
+  // Clear timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="bg-gray-50 min-h-screen py-8 sm:py-12">
@@ -32,8 +50,8 @@ const LogWorkout = () => {
 
         <div className="bg-white p-6 sm:p-8 rounded-xl shadow-md border border-gray-300">
           {showSuccess && (
-            <div className="mb-6 p-4 bg-green-100 border border-green-200 rounded-lg">
-              <p className="text-green-800 font-medium flex items-center justify-center">
+            <div className="mb-6 p-4 bg-green-100 border border-green-200 rounded-lg text-center animate-fade-in">
+              <div className="text-green-800 font-medium flex items-center justify-center mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 mr-2"
@@ -47,11 +65,14 @@ const LogWorkout = () => {
                   />
                 </svg>
                 Workout saved successfully! Redirecting to history...
-              </p>
+              </div>
+              <Button variant="secondary" onClick={handleLogAnother}>
+                Log Another Workout
+              </Button>
             </div>
           )}
 
-          <WorkoutForm onSave={handleSaveWorkout} />
+          {!showSuccess && <WorkoutForm onSave={handleSaveWorkout} />}
         </div>
       </div>
     </div>
