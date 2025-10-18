@@ -175,10 +175,10 @@ const Explore = () => {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Explore Exercises
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-gray-400">
           Discover new exercises to add to your workout routine.
         </p>
       </div>
@@ -191,12 +191,12 @@ const Explore = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search exercises (e.g., bench press, squats)..."
-          className="sm:col-span-2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
+          className="sm:col-span-2 px-4 py-3 border  border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
         />
         <select
           value={selectedMuscle}
           onChange={(e) => setSelectedMuscle(e.target.value)}
-          className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition bg-white"
+          className="px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
         >
           <option value="">All Muscle Groups</option>
           {muscles.map((muscle) => (
@@ -214,6 +214,7 @@ const Explore = () => {
             <Button
               type="button"
               variant="secondary"
+              className="dark:bg-gray-700 dark:hover:bg-gray-600"
               onClick={handleClearSearch}
             >
               Clear
@@ -224,9 +225,11 @@ const Explore = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-800 font-semibold">An error occurred:</p>
-          <p className="text-red-700 mt-1">{error}</p>
+        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500/30 rounded-lg">
+          <p className="text-red-800 dark:text-red-200 font-semibold">
+            An error occurred:
+          </p>
+          <p className="text-red-700 dark:text-red-300 mt-1">{error}</p>
           <Button onClick={handleRetry} className="mt-4">
             Retry
           </Button>
@@ -258,9 +261,9 @@ const Explore = () => {
       ) : (
         !loading && (
           <div className="text-center py-16">
-            <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+            <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
               <svg
-                className="w-12 h-12 text-gray-400"
+                className="w-12 h-12 text-gray-400 dark:text-gray-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -273,10 +276,10 @@ const Explore = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
               No Exercises Found
             </h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Try a different search term or clear your search.
             </p>
           </div>

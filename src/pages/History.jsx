@@ -55,73 +55,74 @@ const History = () => {
 
   return (
     <div>
-        {/* Header */}
+      {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Workout History
-          </h1>
-        <p className="text-gray-600">
-            Review your past workouts and track your consistency.
-          </p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Workout History
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Review your past workouts and track your consistency.
+        </p>
+      </div>
+
+      {/* Stats Bar */}
+      {workouts.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="bg-gradient-to-br from-primary-500 to-primary-600 dark:from-primary-600 dark:to-primary-700 rounded-xl p-6 text-white transition-colors duration-300">
+            <p className="text-primary-100 dark:text-primary-200 text-sm mb-1">
+              Total Workouts
+            </p>
+            <p className="text-4xl font-bold">{workouts.length}</p>
+          </div>
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-xl p-6 text-white transition-colors duration-300">
+            <p className="text-blue-100 dark:text-blue-200 text-sm mb-1">
+              This Week
+            </p>
+            <p className="text-4xl font-bold">{workoutsThisWeek}</p>
+          </div>
+          <div className="bg-gradient-to-br from-cyan-500 to-cyan-600 dark:from-cyan-600 dark:to-cyan-700 rounded-xl p-6 text-white transition-colors duration-300">
+            <p className="text-cyan-100 text-sm mb-1">Total Volume</p>
+            <p className="text-4xl font-bold">
+              {workouts
+                .reduce((sum, w) => sum + (w.totalVolume || 0), 0)
+                .toFixed(0)}{" "}
+              kg
+            </p>
+          </div>
         </div>
+      )}
 
-        {/* Stats Bar */}
-        {workouts.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl p-6 text-white">
-              <p className="text-primary-100 text-sm mb-1">Total Workouts</p>
-              <p className="text-4xl font-bold">{workouts.length}</p>
-            </div>
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
-              <p className="text-blue-100 text-sm mb-1">This Week</p>
-              <p className="text-4xl font-bold">{workoutsThisWeek}</p>
-            </div>
-            <div className="bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl p-6 text-white">
-              <p className="text-cyan-100 text-sm mb-1">Total Volume</p>
-              <p className="text-4xl font-bold">
-                {workouts
-                  .reduce((sum, w) => sum + (w.totalVolume || 0), 0)
-                  .toFixed(0)}{" "}
-                kg
-              </p>
-            </div>
+      {/* Filters */}
+      {workouts.length > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div className="flex gap-2">
+            {filterOptions.map((option) => (
+              <button
+                key={option.key}
+                onClick={() => setFilter(option.key)}
+                className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                  filter === option.key
+                    ? "bg-primary-600 text-white"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
           </div>
-        )}
 
-        {/* Filters */}
-        {workouts.length > 0 && (
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-            <div className="flex gap-2">
-              {filterOptions.map((option) => (
-                <button
-                  key={option.key}
-                  onClick={() => setFilter(option.key)}
-                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-                    filter === option.key
-                      ? "bg-primary-600 text-white"
-                      : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
+          <Button
+            variant="danger"
+            onClick={() => setShowClearConfirm(true)}
+            className="text-sm"
+          >
+            Clear All History
+          </Button>
+        </div>
+      )}
 
-            <Button
-              variant="danger"
-              onClick={() => setShowClearConfirm(true)}
-              className="text-sm"
-            >
-              Clear All History
-            </Button>
-          </div>
-        )}
-
-        {/* Workout List */}
-        <HistoryList
-          workoutsByDate={filteredWorkouts}
-          onDelete={deleteWorkout}
-        />
+      {/* Workout List */}
+      <HistoryList workoutsByDate={filteredWorkouts} onDelete={deleteWorkout} />
 
       {/* Delete Confirmation Modal */}
       <Modal
@@ -131,7 +132,7 @@ const History = () => {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             Are you sure you want to delete all of your workout history? This
             action cannot be undone.
           </p>
@@ -142,10 +143,7 @@ const History = () => {
             >
               Cancel
             </Button>
-            <Button
-              variant="danger"
-              onClick={handleClearAll}
-            >
+            <Button variant="danger" onClick={handleClearAll}>
               Clear All
             </Button>
           </div>
