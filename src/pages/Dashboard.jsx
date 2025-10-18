@@ -135,7 +135,7 @@ const Dashboard = () => {
             No Data Yet
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Start logging workouts to see your progress and analytics!
+            Log workouts to see your progress and analytics!
           </p>
           <Link to="/log">
             <Button variant="primary">Log Your First Workout</Button>

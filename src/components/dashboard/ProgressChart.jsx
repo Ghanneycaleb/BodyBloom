@@ -42,11 +42,16 @@ const ProgressChart = ({ workouts }) => {
 
     workouts.forEach((workout) => {
       const date = new Date(workout.date);
-      const weekStart = new Date(date);
-      weekStart.setDate(date.getDate() - date.getDay()); // Start of week (Sunday)
+      // Use UTC methods to avoid timezone issues
+      const dayOfWeek = date.getUTCDay(); // 0=Sunday, 1=Monday, etc.
+      const weekStartOffset = date.getUTCDate() - dayOfWeek;
+      const weekStart = new Date(
+        Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), weekStartOffset)
+      );
       const weekKey = weekStart.toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
+        timeZone: "UTC",
       });
 
       if (!weeklyData[weekKey]) {

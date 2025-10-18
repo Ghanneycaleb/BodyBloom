@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import "tailwindcss";
+
 /* Modal styling enhancements */
 html.dark [role="dialog"],
 html.dark .modal {
@@ -25,8 +28,8 @@ html.dark .modal span {
 /* Modal backdrop */
 html.dark [class*="bg-black"] {
   background-color: rgba(0, 0, 0, 0.7) !important;
-}@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
-@import "tailwindcss";
+}
+
 
 @theme {
   /* Cohesive and modern Indigo color palette using oklch for consistency */
@@ -44,9 +47,7 @@ html.dark [class*="bg-black"] {
   --font-sans: "Inter", sans-serif;
 }
 
-/* ============================================
-   LIGHT MODE (DEFAULT)
-   ============================================ */
+
 html {
   color-scheme: light;
 }
@@ -73,9 +74,7 @@ main {
   background-color: #f9fafb;
 }
 
-/* ============================================
-   DARK MODE - UNIVERSAL SELECTOR
-   ============================================ */
+
 
 /* When html has .dark class, apply dark mode to everything */
 html.dark {
@@ -183,7 +182,7 @@ html.dark [class*="from-green-100"] {
   color: #f9fafb !important;
 }
 
-/* Remove the overly broad 50/100 selector that was darkening everything */
+
 
 /* Text colors in dark mode */
 html.dark h1,
@@ -263,9 +262,6 @@ html.dark ::-webkit-scrollbar-thumb:hover {
   background-color: #6b7280;
 }
 
-/* ============================================
-   COMPONENT STYLES
-   ============================================ */
 
 .btn-primary {
   background-color: #4f46e5;
@@ -340,9 +336,7 @@ html.dark .btn-secondary:hover {
   transform: translateY(-4px);
 }
 
-/* ============================================
-   ANIMATIONS
-   ============================================ */
+
 
 @keyframes bounce-smooth {
   0%,

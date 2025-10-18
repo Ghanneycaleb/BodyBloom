@@ -14,7 +14,7 @@ const HistoryList = ({ workoutsByDate, onDelete }) => {
           </svg>
         </div>
         <h3 className="text-xl font-semibold text-gray-900 mb-2">No Workouts Yet</h3>
-        <p className="text-gray-600 mb-6">Start logging your workouts to see them here!</p>
+        <p className="text-gray-600 mb-6">Log your workouts to see them here!</p>
         <a
           href="/log"
           className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
