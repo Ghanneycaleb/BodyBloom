@@ -1,185 +1,289 @@
-#  BodyBloom
+# BodyBloom
 
-**Tagline:** *Track your progress. Feel your growth.*
+Track your progress. Feel your growth.
 
-A modern fitness tracking web application designed to motivate, educate, and empower users on their fitness journey. BodyBloom combines intuitive workout logging, exercise discovery, progress visualization, and daily motivation to create a holistic fitness companion.
+BodyBloom is a comprehensive fitness tracking web application designed to help users log workouts, monitor progress, explore exercises, and stay motivated throughout their fitness journey. The application combines intuitive workout logging, real-time exercise data, progress visualization, and daily motivation to create a complete fitness companion.
 
----
+## Overview
 
-##  Project Vision
+BodyBloom goes beyond simple workout tracking. It provides users with a complete ecosystem for managing their fitness including workout logging, historical analysis, exercise discovery, progress analytics, and daily motivation through curated content.
 
-BodyBloom goes beyond simple workout tracking—it's a comprehensive fitness experience that:
-- Makes fitness management **effortless and exciting**
-- Provides **data-driven insights** into your progress
-- Delivers **daily motivation** through quotes and music
-- Helps users **stay consistent** and feel empowered
+## Key Features
 
----
+### Workout Logging
+Record exercises with detailed metrics including sets, reps, and weight lifted. The application calculates workout statistics automatically, including total volume and estimated duration.
 
-##  Features
+### Workout History
+View all past workouts organized by date. Filter workouts by time period (all time, this week, this month), view detailed exercise breakdowns, and manage your workout records with edit and delete functionality.
 
-###  Current Features
--  **Responsive Navigation** - Seamless navigation across all pages (desktop & mobile)
--  **Modern UI Components** - Reusable Button, Card, Modal, and Loader components
--  **Clean Layout System** - Consistent layout with navbar and footer
--  **Landing Page** - Engaging home page with feature highlights
+### Exercise Exploration
+Browse a comprehensive exercise database sourced from the WGER API. Search exercises by name, filter by muscle group, and view detailed information about proper form and muscle targeting.
 
-###  Upcoming Features
--  **Workout Logging** - Record exercises, sets, reps, and weights
--  **Workout History** - View and manage past sessions grouped by date
--  **Exercise Library** - Explore exercises via WGER API integration
--  **Motivation Hub** - Daily quotes and curated workout playlists
--  **Progress Dashboard** - Interactive charts and performance analytics
--  **Dark Mode** - Toggle between light and dark themes
+### Progress Dashboard
+Visualize your fitness journey through interactive charts showing workout frequency and total volume over time. View statistics including total workouts, current streak, and most performed exercises.
 
----
+### Motivation Hub
+Access daily motivational quotes and a curated playlist of workout songs with direct Spotify integration. Each song includes genre and BPM information for matching your workout intensity.
 
-##  Tech Stack
+### Dark Mode
+Toggle between light and dark themes with persistent preference storage. The application respects system dark mode preferences and remembers user choices.
 
-| Category | Technology |
-|----------|-----------|
-| **Frontend** | React 18 |
-| **Routing** | React Router v6 |
-| **Styling** | Tailwind CSS v4 |
-| **Build Tool** | Vite |
-| **State Management** | React Hooks (useState, useEffect) |
-| **Data Storage** | LocalStorage (Phase 1) → Firebase (Phase 2) |
-| **API Integration** | WGER Exercise API |
-| **Charts & Visualization** | Recharts / Chart.js |
-| **Deployment** | Vercel / Netlify |
-| **Version Control** | Git & GitHub |
+## Technology Stack
 
----
+Frontend Framework: React 18
+Routing: React Router v6
+Styling: Tailwind CSS v4 (with OKLCH color palette)
+Build Tool: Vite
+State Management: React Hooks (useState, useEffect, useCallback, useContext)
+Data Visualization: Recharts
+Icons: Lucide React
+Data Storage: Browser LocalStorage (Phase 1)
+API Integration: WGER Exercise API
+Deployment: Vercel or Netlify
 
-##  Installation & Setup
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── common/              # Reusable UI components
+│   │   ├── Button.jsx
+│   │   ├── Card.jsx
+│   │   ├── Modal.jsx
+│   │   ├── Loader.jsx
+│   │   ├── ErrorBoundary.jsx
+│   │   └── DarkModeToggle.jsx
+│   ├── layout/              # Layout and navigation
+│   │   ├── Navbar.jsx
+│   │   └── Layout.jsx
+│   ├── explore/             # Exercise exploration
+│   │   └── ExerciseCard.jsx
+│   ├── dashboard/           # Dashboard components
+│   │   ├── StatsCard.jsx
+│   │   └── ProgressChart.jsx
+│   └── workout/             # Workout logging
+│       ├── WorkoutForm.jsx
+│       └── ExerciseInput.jsx
+├── pages/                   # Page-level components
+│   ├── Home.jsx
+│   ├── LogWorkout.jsx
+│   ├── History.jsx
+│   ├── Explore.jsx
+│   ├── Motivation.jsx
+│   └── Dashboard.jsx
+├── hooks/                   # Custom React hooks
+│   ├── useLocalStorage.jsx
+│   ├── useWorkouts.jsx
+│   └── useDarkMode.jsx
+├── services/                # API and data services
+│   └── api.js
+├── utils/                   # Helper functions and constants
+│   ├── helpers.js
+│   └── constants.js
+├── data/                    # Static data
+│   ├── quotes.js
+│   └── songs.js
+├── App.jsx                  # Main application component
+├── main.jsx                 # Application entry point
+└── index.css               # Global styles and dark mode
+```
+
+## Installation
 
 ### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
-- Git
+Node.js (v16 or higher)
+npm or yarn
+Git
 
-### Steps
+### Setup Steps
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Ghanneycaleb/bodybloom.git
-   cd bodybloom
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-4. **Open in browser**
-   ```
-   Navigate to http://localhost:5173
-   ```
-
----
-
-##  Project Structure
-
-```
-bodybloom/
-├── public/              # Static assets
-├── src/
-│   ├── components/      # Reusable React components
-│   │   ├── common/      # Shared UI components
-│   │   ├── layout/      # Layout components (Navbar, Footer)
-│   │   ├── workout/     # Workout-related components (coming soon)
-│   │   ├── dashboard/   # Dashboard components (coming soon)
-│   │   └── ...
-│   ├── pages/           # Page components (Home, Dashboard, etc.)
-│   ├── hooks/           # Custom React hooks (coming soon)
-│   ├── services/        # API services (coming soon)
-│   ├── utils/           # Helper functions (coming soon)
-│   ├── data/            # Static data (quotes, playlists)
-│   ├── App.jsx          # Main app component with routing
-│   ├── main.jsx         # App entry point
-│   └── index.css        # Global styles with Tailwind
-├── .gitignore
-├── package.json
-├── vite.config.js
-└── README.md
+1. Clone the repository
+```bash
+git clone https://github.com/YOUR_USERNAME/bodybloom.git
+cd bodybloom
 ```
 
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Start the development server
+```bash
+npm run dev
+```
+
+4. Open your browser and navigate to http://localhost:5173
+
+## Usage
+
+### Logging a Workout
+1. Navigate to "Log Workout"
+2. Enter a name for your workout session
+3. Add exercises by entering the exercise name, sets, reps, and weight
+4. Add optional notes about the workout
+5. Review the calculated statistics (duration and total volume)
+6. Save the workout
+
+### Viewing History
+1. Go to "History" to see all logged workouts
+2. Workouts are grouped by date with summary statistics
+3. Use filters to view workouts from specific time periods
+4. Click "View Details" on any workout to see full exercise information
+5. Delete workouts using the delete button
+
+### Exploring Exercises
+1. Navigate to "Explore Exercises"
+2. Use the search box to find exercises by name
+3. Select a muscle group from the dropdown to filter results
+4. Browse exercise cards showing basic information
+5. Click on any exercise to view detailed information
+
+### Checking Progress
+1. Go to the "Dashboard" to see your fitness analytics
+2. View key statistics: total workouts, this week's count, current streak, total volume
+3. Toggle between "Workouts" and "Volume" charts to analyze your progress
+4. See your most frequently performed exercises
+5. Check recent workout summaries
+
+### Staying Motivated
+1. Visit the "Motivation" page daily
+2. Click "New Quote" to get a fresh motivational quote
+3. Browse the workout playlist with Spotify links
+4. Read quick fitness tips at the bottom of the page
+
+### Theme Preference
+1. Click the sun/moon icon in the navigation bar to toggle dark mode
+2. Your preference is automatically saved and persists across sessions
+3. The app respects your system dark mode preference on first visit
+
+## Data Management
+
+### LocalStorage
+All user data including workouts is stored in the browser's LocalStorage. This data persists between sessions and works offline. Clear your browser cache to delete all stored data.
+
+### Exported Data Structure
+Workouts are stored with the following structure:
+- Workout ID (timestamp-based)
+- Date created
+- Workout name
+- Array of exercises with sets, reps, and weight
+- Optional notes
+- Calculated metrics (duration, total volume)
+
+## Development Roadmap
+
+### Phase 1: Foundation (Completed)
+Project initialization, folder structure, basic routing, and component library
+
+### Phase 2: Core Features (Completed)
+Workout logging, LocalStorage integration, API integration, history management, and motivation hub
+
+### Phase 3: Polish (Completed)
+Progress charts, animations, error handling, dark mode, and responsive refinements
 
 ### Future Enhancements
-- [ ] User authentication with Firebase
-- [ ] Workout streak tracking
-- [ ] Personal fitness goals
-- [ ] AI-powered workout recommendations
-- [ ] Social features (sharing, challenges)
-- [ ] PWA support for offline usage
+User authentication with Firebase
+Cloud synchronization across devices
+Workout streak tracking and personal goals
+AI-powered workout recommendations
+Social features and challenge mode
+PWA support for mobile app installation
+Export data as PDF or CSV
+Workout templates and quick-start routines
+Rest timer and interval training support
+Body measurements tracking
 
----
+## Performance Considerations
 
-##  Design Philosophy
+The application is optimized for performance with:
+- Lazy loading of components
+- Efficient re-renders through proper React Hook usage
+- Debounced search to reduce API calls
+- Pagination for large exercise lists
+- Optimized Tailwind CSS with v4
+- Smooth animations without compromising performance
 
-BodyBloom follows modern web design principles:
+## Browser Compatibility
 
-- **Clean & Minimalist** - Focus on content, remove clutter
-- **User-Centric** - Intuitive navigation and clear CTAs
-- **Responsive First** - Mobile-friendly from the ground up
-- **Accessible** - WCAG compliant color contrasts and semantic HTML
-- **Performance** - Optimized load times and smooth interactions
+Modern browsers with support for:
+- ES6+ JavaScript
+- LocalStorage API
+- CSS Grid and Flexbox
+- CSS transitions and animations
 
----
+Tested on:
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
 
-##  Contributing
+## Deployment
 
-This is a capstone project, but suggestions and feedback are welcome!
+### Deploy to Vercel
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Push your code to GitHub
+2. Visit vercel.com and sign in with GitHub
+3. Click "Add New Project" and select your repository
+4. Vercel auto-detects Vite configuration
+5. Click "Deploy"
 
----
-
-##  License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
-##  Developer
-
-
-- GitHub: [https://github.com/Ghanneycaleb]
-- LinkedIn: [https://linkedin.com/in/calebghanney]
-
-
----
-
-##  Acknowledgments
-
-- **WGER API** - For providing comprehensive exercise data
-- **Tailwind CSS** - For the amazing utility-first framework
-- **React Community** - For incredible tools and resources
-- **Fitness Enthusiasts** - For inspiration and feedback
-
----
-
-##  Screenshots
-
-*Coming soon! Screenshots will be added as features are completed.*
-
----
-
-<div align="center">
-
-**Built with love and dedication to fitness**
-
-*BodyBloom - Where Progress Blooms* 
-
-</div>
+Configuration is included in vercel.json for proper routing.
 
 
+## Environment Variables
+
+Currently, BodyBloom uses only public APIs (WGER) and requires no environment variables. For future Firebase integration, create a .env.local file with:
+
+```
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+```
+
+## Git Workflow
+
+The project uses a professional Git workflow:
+- main branch: Stable, production-ready code
+- dev branch: Active development
+- Feature branches: Individual feature development
+
+Commit frequently with descriptive messages following conventional commits format.
+
+## Code Quality
+
+The project maintains code quality through:
+- ESLint configuration for code standards
+- React best practices and hooks patterns
+- Component composition and reusability
+- Proper error handling and loading states
+- Accessibility considerations
+
+## Known Limitations
+
+- Data is stored locally in the browser (no cloud sync in Phase 1)
+- Exercise data comes from WGER API which may have inconsistent muscle group tagging
+- Search results depend on API response quality
+- No user authentication (all data is device-specific)
+- Offline functionality limited to cached data
+
+## Support and Contributing
+
+For questions or issues, refer to the GitHub Issues section. For future enhancements, create a feature branch and submit a pull request.
+
+## License
+
+This project is open source and available under the MIT License.
+
+## Version History
+
+Version 1.0.0 - Initial Release
+Core functionality including workout logging, history, exercise exploration, progress analytics, and motivation hub. Dark mode support and responsive design for all devices.
+
+## Credits
+
+Exercise data sourced from WGER API (https://wger.de/)
+Motivation quotes from fitness and wellness sources
+Song playlist curated for workout intensity and energy
+Icons from Lucide React
+UI components built with React and Tailwind CSS
