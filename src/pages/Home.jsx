@@ -35,14 +35,18 @@ const Home = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center py-24 px-4 bg-gradient-to-b from-white to-indigo-50 scroll-smooth">
+      <section className="flex flex-col items-center justify-center text-center py-24 px-4 bg-gradient-to-b from-white to-primary-50 dark:from-gray-900 dark:to-gray-800 scroll-smooth">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6">
-          <span className="text-gray-900 animate-fade-in">Welcome to </span>
-          <span className="text-primary-600 animate-fade-in delay-100">BodyBloom</span>
+          <span className="text-gray-900 dark:text-white animate-fade-in">
+            Welcome to{" "}
+          </span>
+          <span className="text-primary-600 dark:text-primary-400 animate-fade-in delay-100">
+            BodyBloom
+          </span>
           {/* Use inline-block and vertical alignment for the icon */}
-          <Sparkle className="w-8 h-8 text-primary-600 animate-spin-pulse inline-block align-middle ml-2" />
+          <Sparkle className="w-8 h-8 text-primary-600 dark:text-primary-400 animate-spin-pulse inline-block align-middle ml-2" />
         </h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-in delay-200">
+        <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto animate-fade-in delay-200">
           Where your fitness journey blooms — track, train, and transform with
           ease.
         </p>
@@ -68,20 +72,21 @@ const Home = () => {
 
       {/* Features Grid */}
       <section className="py-16">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+        <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
           Everything You Need to Succeed
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 stagger-children">
           {features.map((feature, index) => (
             <Link key={index} to={feature.link} className="block h-full">
-              <Card className="h-full transition-all duration-500 ease-out hover:border-primary-500 hover:shadow-xl hover:-translate-y-2 cursor-pointer">
-                {/* <div className="text-4xl mb-4">{feature.icon}</div> */}
+              <Card className="h-full transition-all duration-500 ease-out hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-xl hover:-translate-y-2 cursor-pointer">
                 <div className="mb-4">{feature.icon}</div>
 
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 text-sm">{feature.description}</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  {feature.description}
+                </p>
               </Card>
             </Link>
           ))}
@@ -89,18 +94,18 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-2xl p-12 text-center text-white">
+      <section className="bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-700 dark:to-primary-900 rounded-2xl p-12 text-center text-white transition-colors duration-300">
         <h2 className="text-3xl font-bold mb-4">
           Ready to Transform Your Fitness?
         </h2>
-        <p className="text-primary-100 mb-8 max-w-xl mx-auto">
+        <p className="text-primary-100 dark:text-primary-200 mb-8 max-w-xl mx-auto">
           Join BodyBloom today and start tracking your progress towards a
           healthier, stronger you.
         </p>
         <Link to="/log">
           <Button
             variant="secondary"
-            className="bg-white text-primary-700 hover:bg-gray-50 hover:shadow-lg hover:animate-bounce-smooth"
+            className="bg-white  dark:bg-gray-100 text-primary-700 dark:text-primary-700 hover:bg-gray-50  dark:hover:bg-gray-200 hover:shadow-lg hover:animate-bounce-smooth"
           >
             Get Started Now
           </Button>

@@ -27,18 +27,18 @@ const Motivation = () => {
     <div>
         {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Daily Motivation
           </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-gray-400">
             Stay inspired with quotes and energizing music
           </p>
         </div>
 
         {/* Quote Section */}
         <section className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+          <div className="flex items-center justify-between mb-6">_
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
               <Quote className="text-primary-600" /> Quote of the Day
             </h2>
             <Button
@@ -61,10 +61,10 @@ const Motivation = () => {
         {/* Playlist Section */}
         <section>
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-3">
               <Headphones className="text-primary-600" /> Workout Playlist
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Pump up your workout with these high-energy tracks
             </p>
           </div>
@@ -73,21 +73,21 @@ const Motivation = () => {
             {displayedSongs.map((song, index) => (
               <Card
                 key={index}
-                className="hover:border-primary-300 transition-colors"
+                className="hover:border-primary-300 dark:hover:border-primary-600 transition-colors"
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-primary-600">
+                  <div className="flex-shrink-0 w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center text-primary-600 dark:text-primary-400">
                     <Music />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 truncate">
+                    <h3 className="font-semibold text-gray-900 dark:text-white truncate">
                       {song.title}
                     </h3>
-                    <p className="text-sm text-gray-600 truncate">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
                       {song.artist}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
-                      <span className="px-2 py-0.5 bg-primary-100 text-primary-700 text-xs font-medium rounded">
+                      <span className="px-2 py-0.5 bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 text-xs font-medium rounded">
                         {song.genre}
                       </span>
                       <span className="text-xs text-gray-500">
@@ -136,42 +136,42 @@ const Motivation = () => {
 
         {/* Motivational Tips */}
         <section className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
             <Lightbulb className="text-primary-600" /> Quick Tips
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <h3 className="font-semibold text-primary-900 mb-2">
+            <Card className="bg-gradient-to-br from-primary-50 dark:from-primary-900 to-primary-100 dark:to-primary-800 border-primary-200 dark:border-primary-700 transition-colors duration-300">
+              <h3 className="font-semibold text-primary-900 dark:text-primary-100 mb-2">
                 Consistency Over Perfection
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-800 dark:text-primary-200 text-sm">
                 It's better to work out 3 times a week consistently than to aim
                 for 7 days and burn out.
               </p>
             </Card>
-            <Card>
-              <h3 className="font-semibold text-blue-900 mb-2">
+            <Card className="bg-gradient-to-br from-blue-50 dark:from-blue-900 to-blue-100 dark:to-blue-800 border-blue-200 dark:border-blue-700 transition-colors duration-300">
+              <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
                 Rest is Progress
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-800 dark:text-blue-200 text-sm">_
                 Your muscles grow during rest, not during workouts. Don't skip
                 recovery days.
               </p>
             </Card>
-            <Card>
-              <h3 className="font-semibold text-purple-900 mb-2">
+            <Card className="bg-gradient-to-br from-purple-50 dark:from-purple-900 to-purple-100 dark:to-purple-800 border-purple-200 dark:border-purple-700 transition-colors duration-300">
+              <h3 className="font-semibold text-purple-900 dark:text-purple-100 mb-2">
                 Track Your Progress
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-800 dark:text-purple-200 text-sm">_
                 What gets measured gets improved. Log every workout to see your
                 growth.
               </p>
             </Card>
-            <Card>
-              <h3 className="font-semibold text-orange-900 mb-2">
+            <Card className="bg-gradient-to-br from-orange-50 dark:from-orange-900 to-orange-100 dark:to-orange-800 border-orange-200 dark:border-orange-700 transition-colors duration-300">
+              <h3 className="font-semibold text-orange-900 dark:text-orange-100 mb-2">
                 Celebrate Small Wins
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-800 dark:text-orange-200 text-sm">_
                 Every rep, every workout, every healthy choice is a step toward
                 your goal.
               </p>

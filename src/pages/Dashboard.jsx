@@ -115,7 +115,7 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold text-gray-900  mb-8">
           Progress Dashboard
         </h1>
-        <Card className="text-center py-16 bg-white ">
+        <Card className="text-center py-16 bg-white dark:bg-gray-800">
           <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
             <svg
               className="w-12 h-12 text-gray-400"
@@ -131,10 +131,10 @@ const Dashboard = () => {
               />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900  mb-2">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
             No Data Yet
           </h3>
-          <p className="text-gray-600  mb-6">
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
             Start logging workouts to see your progress and analytics!
           </p>
           <Link to="/log">
@@ -149,10 +149,10 @@ const Dashboard = () => {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900  mb-2">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Progress Dashboard
         </h1>
-        <p className="text-gray-600 ">
+        <p className="text-gray-600 dark:text-gray-400">
           Track your fitness journey and celebrate your achievements
         </p>
       </div>
@@ -195,8 +195,10 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card>
           <div className="text-center">
-            <p className="text-sm text-gray-600  mb-1">Total Exercises</p>
-            <p className="text-3xl font-bold text-primary-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+              Total Exercises
+            </p>
+            <p className="text-3xl font-bold text-primary-600 dark:text-primary-400">
               {stats.totalExercises}
             </p>
             <p className="text-xs text-gray-500 mt-1">Logged exercises</p>
@@ -204,8 +206,10 @@ const Dashboard = () => {
         </Card>
         <Card>
           <div className="text-center">
-            <p className="text-sm text-gray-600  mb-1">Avg. Duration</p>
-            <p className="text-3xl font-bold text-primary-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+              Avg. Duration
+            </p>
+            <p className="text-3xl font-bold text-primary-600 dark:text-primary-400">
               {stats.avgDuration} min
             </p>
             <p className="text-xs text-gray-500 mt-1">Per workout</p>
@@ -213,8 +217,10 @@ const Dashboard = () => {
         </Card>
         <Card>
           <div className="text-center">
-            <p className="text-sm text-gray-600  mb-1">Last Workout</p>
-            <p className="text-3xl font-bold text-primary-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+              Last Workout
+            </p>
+            <p className="text-3xl font-bold text-primary-600 dark:text-primary-400">
               {workouts.length > 0
                 ? daysBetween(new Date(workouts[0].date), new Date())
                 : 0}
@@ -234,7 +240,8 @@ const Dashboard = () => {
         {/* Recent Workouts */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900 ">
+            _
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
               Recent Workouts
             </h2>
             <Link to="/history">
@@ -247,10 +254,12 @@ const Dashboard = () => {
             {recentWorkouts.map((workout) => (
               <div
                 key={workout.id}
-                className="p-3 bg-gray-50  rounded-lg border border-gray-200"
+                className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-700"
               >
-                <h4 className="font-medium text-gray-900 ">{workout.name}</h4>
-                <div className="flex items-center gap-3 mt-1 text-sm text-gray-600">
+                <h4 className="font-medium text-gray-900 dark:text-gray-100">
+                  {workout.name}
+                </h4>
+                <div className="flex items-center gap-3 mt-1 text-sm text-gray-600 dark:text-gray-400">
                   <span>{workout.exercises?.length} exercises</span>
                   <span>•</span>
                   <span>•</span>
@@ -263,7 +272,7 @@ const Dashboard = () => {
 
         {/* Top Exercises */}
         <Card>
-          <h2 className="text-xl font-bold text-gray-900  mb-4">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
             Most Performed Exercises
           </h2>
           {topExercises.length > 0 ? (
@@ -271,17 +280,17 @@ const Dashboard = () => {
               {topExercises.map((exercise, index) => (
                 <div
                   key={exercise.name}
-                  className="flex items-center justify-between p-3 bg-gray-50  rounded-lg"
+                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="flex items-center justify-center w-8 h-8 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold">
+                    <span className="flex items-center justify-center w-8 h-8 bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-full text-sm font-semibold">
                       {index + 1}
                     </span>
-                    <span className="font-medium text-gray-900">
+                    <span className="font-medium text-gray-900 dark:text-gray-100">
                       {exercise.name}
                     </span>
                   </div>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
                     {exercise.count} {exercise.count === 1 ? "time" : "times"}
                   </span>
                 </div>
@@ -296,13 +305,13 @@ const Dashboard = () => {
       </div>
 
       {/* Motivational CTA */}
-      <Card className="mt-8 bg-gradient-to-r from-primary-600 to-primary-700 border-none text-white">
+      <Card className="mt-8 bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-700 dark:to-primary-900 text-white shadow-lg dark:shadow-xl transition-colors duration-300">
         <div className="text-center py-8">
           <h2 className="text-2xl font-bold mb-2 flex items-center justify-center gap-2">
             Keep Up the Great Work!
             <PartyPopper className="w-7 h-7" />
           </h2>
-          <p className="text-primary-100 mb-6">
+          <p className="text-primary-100 dark:text-primary-200 mb-6">
             You've logged {stats.totalWorkouts}{" "}
             {stats.totalWorkouts === 1 ? "workout" : "workouts"} and you're on a{" "}
             {stats.streak}-day streak. Stay consistent!
@@ -310,7 +319,7 @@ const Dashboard = () => {
           <Link to="/log">
             <Button
               variant="secondary"
-              className="bg-white text-primary-700 hover:bg-gray-50"
+              className="bg-white dark:bg-gray-100 text-primary-700 dark:text-primary-700 hover:bg-gray-50 dark:hover:bg-gray-200"
             >
               Log Another Workout
             </Button>

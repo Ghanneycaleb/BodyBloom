@@ -3,8 +3,8 @@ const Button = ({ children, variant = 'primary', onClick, type = 'button', class
   
   const variants = {
     primary: 'bg-primary-600 hover:bg-primary-700 text-white shadow-sm hover:shadow-md',
-    secondary: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-300',
-    outline: 'bg-transparent hover:bg-primary-50 text-primary-600 border border-primary-600',
+    secondary: 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-600',
+    outline: 'bg-transparent hover:bg-primary-50 text-primary-600 border border-primary-600 dark:hover:bg-primary-900 text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-400',
     danger: 'bg-red-600 hover:bg-red-700 text-white shadow-sm hover:shadow-md',
   };
 

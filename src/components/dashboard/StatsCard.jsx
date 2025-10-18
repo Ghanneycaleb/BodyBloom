@@ -11,7 +11,7 @@ const StatsCard = ({ title, value, subtitle, icon, color = "primary" }) => {
 
   return (
     <Card
-      className={`bg-gradient-to-br ${colorClasses[color]} border-none text-white`}
+      className={`bg-gradient-to-br ${colorClasses[color]} border-none text-white dark:text-white shadow-lg dark:shadow-2xl`}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
