@@ -43,50 +43,136 @@ Deployment: Vercel or Netlify
 
 ## Project Structure
 
-```
-src/
-├── components/
-│   ├── common/              # Reusable UI components
-│   │   ├── Button.jsx
-│   │   ├── Card.jsx
-│   │   ├── Modal.jsx
-│   │   ├── Loader.jsx
-│   │   ├── ErrorBoundary.jsx
-│   │   └── DarkModeToggle.jsx
-│   ├── layout/              # Layout and navigation
-│   │   ├── Navbar.jsx
-│   │   └── Layout.jsx
-│   ├── explore/             # Exercise exploration
-│   │   └── ExerciseCard.jsx
-│   ├── dashboard/           # Dashboard components
-│   │   ├── StatsCard.jsx
-│   │   └── ProgressChart.jsx
-│   └── workout/             # Workout logging
-│       ├── WorkoutForm.jsx
-│       └── ExerciseInput.jsx
-├── pages/                   # Page-level components
-│   ├── Home.jsx
-│   ├── LogWorkout.jsx
-│   ├── History.jsx
-│   ├── Explore.jsx
-│   ├── Motivation.jsx
-│   └── Dashboard.jsx
-├── hooks/                   # Custom React hooks
-│   ├── useLocalStorage.jsx
-│   ├── useWorkouts.jsx
-│   └── useDarkMode.jsx
-├── services/                # API and data services
-│   └── api.js
-├── utils/                   # Helper functions and constants
-│   ├── helpers.js
-│   └── constants.js
-├── data/                    # Static data
-│   ├── quotes.js
-│   └── songs.js
-├── App.jsx                  # Main application component
-├── main.jsx                 # Application entry point
-└── index.css               # Global styles and dark mode
-```
+BodyBloom Project Structure
+
+Root Directory
+
+src folder
+public folder
+Configuration files
+Documentation files
+
+src Folder
+
+components subfolder
+pages subfolder
+hooks subfolder
+services subfolder
+utils subfolder
+data subfolder
+context subfolder
+App.jsx
+main.jsx
+index.css
+
+components Subfolder
+
+common subfolder
+
+Button.jsx
+Card.jsx
+Modal.jsx
+Loader.jsx
+ErrorBoundary.jsx
+DarkModeToggle.jsx
+
+
+layout subfolder
+
+Navbar.jsx
+Layout.jsx
+
+
+explore subfolder
+
+ExerciseCard.jsx
+ExerciseDetail.jsx
+
+
+dashboard subfolder
+
+StatsCard.jsx
+ProgressChart.jsx
+WorkoutStreak.jsx
+
+
+workout subfolder
+
+WorkoutForm.jsx
+ExerciseInput.jsx
+WorkoutCard.jsx
+
+
+history subfolder
+
+HistoryCard.jsx
+HistoryList.jsx
+
+
+motivation subfolder
+
+MotivationCard.jsx
+
+
+providers subfolder
+
+DarkModeProvider.jsx
+
+
+
+pages Subfolder
+
+Home.jsx
+LogWorkout.jsx
+History.jsx
+Explore.jsx
+Motivation.jsx
+Dashboard.jsx
+
+hooks Subfolder
+
+useLocalStorage.jsx
+useWorkouts.jsx
+useDarkMode.jsx
+
+services Subfolder
+
+api.js
+
+utils Subfolder
+
+helpers.js
+constants.js
+
+data Subfolder
+
+quotes.js
+songs.js
+
+context Subfolder
+
+DarkModeContext.jsx
+
+public Folder
+
+index.html
+favicon.ico
+logo.png
+
+Root Configuration Files
+
+.gitignore
+package.json
+package-lock.json
+vite.config.js
+tailwind.config.js
+vercel.json
+netlify.toml
+.env.example
+
+Documentation
+
+README.md
 
 ## Installation
 
