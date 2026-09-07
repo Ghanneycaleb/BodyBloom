@@ -1,4 +1,5 @@
-import type { Workout, WorkoutRecord } from './workout.types'
+import type { Workout, WorkoutExercise } from './workout.types'
+import { isWorkoutDate } from './workout.dates'
 
 const STORAGE_KEY = 'bodybloom.workouts'
 
@@ -6,92 +7,71 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
 }
 
-function isWorkoutCandidate(value: unknown): value is WorkoutRecord {
-  if (!isRecord(value)) {
-    return false
-  }
-
-  const idIsValid = typeof value.id === 'string' || value.id === undefined || value.id === null
-  const hasRequiredFields =
-    idIsValid &&
-    typeof value.date === 'string' &&
-    typeof value.duration === 'number' &&
-    Array.isArray(value.exercises)
-
-  return hasRequiredFields
-}
-
-function normalizeWorkoutRecord(value: WorkoutRecord): Workout | null {
-  if (!isWorkoutCandidate(value)) {
-    return null
-  }
-
-  const rawExercises = Array.isArray(value.exercises) ? value.exercises : []
-  const normalizedExercises = rawExercises.map((exercise) => {
-    const candidate = isRecord(exercise) ? (exercise as Record<string, unknown>) : undefined
-
-    const rawSets = Array.isArray(candidate?.sets) ? (candidate.sets as unknown[]) : []
-    const normalizedSets = rawSets.map((set) => {
-      const setCandidate = isRecord(set) ? (set as Record<string, unknown>) : undefined
-
-      return {
-        reps: typeof setCandidate?.reps === 'number' ? setCandidate.reps : 0,
-        weight: typeof setCandidate?.weight === 'number' ? setCandidate.weight : 0,
-      }
-    })
-
-    return {
-      exerciseId: typeof candidate?.exerciseId === 'string' ? candidate.exerciseId : crypto.randomUUID(),
-      exerciseName: typeof candidate?.exerciseName === 'string' ? candidate.exerciseName : 'Unknown Exercise',
-      muscleGroup: typeof candidate?.muscleGroup === 'string' ? candidate.muscleGroup : 'General',
-      sets: normalizedSets,
+function normalizeWorkoutRecord(value: unknown): Workout | null {
+  if (!isRecord(value) || typeof value.date !== 'string' || !isWorkoutDate(value.date) ||
+      typeof value.duration !== 'number' || !Number.isFinite(value.duration) || value.duration <= 0 ||
+      !Array.isArray(value.exercises) || value.exercises.length === 0) return null
+  if (value.id != null && (typeof value.id !== 'string' || !value.id.trim())) return null
+  const exercises: WorkoutExercise[] = []
+  for (const exercise of value.exercises) {
+    if (!isRecord(exercise) || typeof exercise.exerciseId !== 'string' || !exercise.exerciseId.trim() ||
+        typeof exercise.exerciseName !== 'string' || !exercise.exerciseName.trim() ||
+        typeof exercise.muscleGroup !== 'string' || !Array.isArray(exercise.sets) || exercise.sets.length === 0) return null
+    const sets = []
+    for (const set of exercise.sets) {
+      if (!isRecord(set) || typeof set.reps !== 'number' || !Number.isSafeInteger(set.reps) || set.reps <= 0 ||
+          typeof set.weight !== 'number' || !Number.isFinite(set.weight) || set.weight < 0 ||
+          !Number.isFinite(set.reps * set.weight)) return null
+      sets.push({ reps: set.reps, weight: set.weight })
     }
-  })
-
+    exercises.push({ exerciseId: exercise.exerciseId, exerciseName: exercise.exerciseName, muscleGroup: exercise.muscleGroup, sets })
+  }
+  // Legacy records may lack identity/timestamps; never invent exercise content.
+  const now = new Date().toISOString()
+  for (const key of ['createdAt', 'updatedAt']) {
+    if (value[key] !== undefined && (typeof value[key] !== 'string' || !Number.isFinite(Date.parse(value[key])))) return null
+  }
   return {
     id: typeof value.id === 'string' ? value.id : crypto.randomUUID(),
-    date: value.date,
-    duration: value.duration,
-    exercises: normalizedExercises,
-    createdAt: typeof value.createdAt === 'string' ? value.createdAt : new Date().toISOString(),
-    updatedAt: typeof value.updatedAt === 'string' ? value.updatedAt : new Date().toISOString(),
+    date: value.date, duration: value.duration, exercises,
+    createdAt: typeof value.createdAt === 'string' ? value.createdAt : now,
+    updatedAt: typeof value.updatedAt === 'string' ? value.updatedAt : now,
   }
 }
 
 export function getWorkouts(): Workout[] {
-  if (typeof window === 'undefined') {
-    return []
-  }
-
-  const storedValue = window.localStorage.getItem(STORAGE_KEY)
-
-  if (!storedValue) {
-    return []
-  }
-
+  if (typeof window === 'undefined') return []
+  let storedValue: string | null
   try {
-    const parsed = JSON.parse(storedValue) as unknown
-
-    if (!Array.isArray(parsed)) {
-      return []
-    }
-
-    const normalized = parsed
-      .map((item) => normalizeWorkoutRecord(item as WorkoutRecord))
-      .filter((item): item is Workout => item !== null)
-
-    return normalized
+    storedValue = window.localStorage.getItem(STORAGE_KEY)
   } catch {
-    return []
+    throw new Error('Saved workouts could not be read. Allow browser storage and try again.')
   }
+  if (!storedValue) return []
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(storedValue)
+  } catch {
+    throw new Error('Saved workout data is unreadable. Back up or repair browser storage before saving again.')
+  }
+  if (!Array.isArray(parsed)) throw new Error('Saved workout data is not a list. Back up or repair browser storage before saving again.')
+  const seen = new Set<string>()
+  return parsed.map(normalizeWorkoutRecord).filter((item): item is Workout => {
+    if (!item || seen.has(item.id)) return false
+    seen.add(item.id)
+    return true
+  })
 }
 
 export function saveWorkouts(workouts: Workout[]): void {
-  if (typeof window === 'undefined') {
-    return
+  if (workouts.some((workout) => !normalizeWorkoutRecord(workout))) {
+    throw new Error('This workout contains invalid data and could not be saved.')
   }
-
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts))
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts))
+  } catch {
+    throw new Error('Workout could not be saved. Browser storage may be full or unavailable. Your edits are still here; please try again.')
+  }
 }
 
 export function addWorkout(workout: Workout): Workout[] {

@@ -1,3 +1,4 @@
+import { getTodayDateString, isWorkoutDate } from './workout.dates'
 import type { Workout, WorkoutExercise, WorkoutSet } from './workout.types'
 
 export type WorkoutSetForm = {
@@ -37,13 +38,6 @@ export type WorkoutSummary = {
   totalVolume: number
 }
 
-export function getTodayDateString(): string {
-  const now = new Date()
-  const offset = now.getTimezoneOffset()
-  const localDate = new Date(now.getTime() - offset * 60 * 1000)
-  return localDate.toISOString().slice(0, 10)
-}
-
 export function createEmptySet(): WorkoutSetForm {
   return {
     id: crypto.randomUUID(),
@@ -77,7 +71,7 @@ export function calculateWorkoutSummary(form: WorkoutFormValues): WorkoutSummary
       const reps = Number(set.reps)
       const weight = Number(set.weight)
 
-      if (!Number.isFinite(reps) || !Number.isFinite(weight)) {
+      if (!Number.isSafeInteger(reps) || reps <= 0 || !set.weight.trim() || !Number.isFinite(weight) || weight < 0 || !Number.isFinite(reps * weight)) {
         return exerciseVolume
       }
 
@@ -95,13 +89,13 @@ export function calculateWorkoutSummary(form: WorkoutFormValues): WorkoutSummary
 export function validateWorkoutForm(form: WorkoutFormValues): WorkoutFormErrors {
   const errors: WorkoutFormErrors = {}
 
-  if (!form.date || Number.isNaN(new Date(form.date).getTime())) {
+  if (!isWorkoutDate(form.date)) {
     errors.date = 'Please pick a valid workout date.'
   }
 
   const durationValue = Number(form.duration)
-  if (!Number.isFinite(durationValue) || durationValue <= 0) {
-    errors.duration = 'Duration must be greater than 0 minutes.'
+  if (!Number.isSafeInteger(durationValue) || durationValue <= 0) {
+    errors.duration = 'Duration must be a positive whole number of minutes.'
   }
 
   if (form.exercises.length === 0) {
@@ -129,12 +123,12 @@ export function validateWorkoutForm(form: WorkoutFormValues): WorkoutFormErrors 
         const weight = Number(set.weight)
         const messages: string[] = []
 
-        if (!Number.isFinite(reps) || reps <= 0) {
-          messages.push('Reps must be greater than 0.')
+        if (!Number.isSafeInteger(reps) || reps <= 0) {
+          messages.push('Reps must be a positive whole number.')
         }
 
-        if (!Number.isFinite(weight) || weight < 0) {
-          messages.push('Weight must be 0 or greater.')
+        if (!set.weight.trim() || !Number.isFinite(weight) || weight < 0 || !Number.isFinite(reps * weight)) {
+          messages.push('Enter a valid weight of 0 or greater.')
         }
 
         if (messages.length > 0) {
@@ -160,6 +154,7 @@ export function validateWorkoutForm(form: WorkoutFormValues): WorkoutFormErrors 
 }
 
 export function buildWorkoutFromForm(form: WorkoutFormValues): Workout {
+  if (Object.keys(validateWorkoutForm(form)).length) throw new Error('Please correct the workout fields before saving.')
   const now = new Date().toISOString()
 
   const exercises: WorkoutExercise[] = form.exercises.map((exercise) => {
@@ -184,4 +179,15 @@ export function buildWorkoutFromForm(form: WorkoutFormValues): Workout {
     createdAt: now,
     updatedAt: now,
   }
+}
+
+export function isWorkoutFormDirty(form: WorkoutFormValues, initial: WorkoutFormValues): boolean {
+  const content = (value: WorkoutFormValues) => JSON.stringify({
+    date: value.date, duration: value.duration,
+    exercises: value.exercises.map((exercise) => ({
+      exerciseName: exercise.exerciseName, muscleGroup: exercise.muscleGroup,
+      sets: exercise.sets.map((set) => ({ reps: set.reps, weight: set.weight })),
+    })),
+  })
+  return content(form) !== content(initial)
 }

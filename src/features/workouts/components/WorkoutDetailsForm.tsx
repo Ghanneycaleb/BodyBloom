@@ -32,6 +32,8 @@ export function WorkoutDetailsForm({
           <div className="relative">
             <Input
               id="workout-date"
+              aria-invalid={Boolean(errors.date)}
+              aria-describedby={errors.date ? 'workout-date-error' : undefined}
               type="date"
               value={date}
               onChange={(event) => onDateChange(event.target.value)}
@@ -39,7 +41,7 @@ export function WorkoutDetailsForm({
             />
             <CalendarDays className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-secondary" aria-hidden="true" />
           </div>
-          {errors.date ? <p className="mt-2 text-sm text-error">{errors.date}</p> : null}
+          {errors.date ? <p id="workout-date-error" className="mt-2 text-sm text-error">{errors.date}</p> : null}
         </div>
 
         <div>
@@ -49,6 +51,8 @@ export function WorkoutDetailsForm({
           <div className="relative">
             <Input
               id="workout-duration"
+              aria-invalid={Boolean(errors.duration)}
+              aria-describedby={errors.duration ? 'workout-duration-error' : undefined}
               type="number"
               min="1"
               step="1"
@@ -58,7 +62,7 @@ export function WorkoutDetailsForm({
             />
             <Clock3 className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-secondary" aria-hidden="true" />
           </div>
-          {errors.duration ? <p className="mt-2 text-sm text-error">{errors.duration}</p> : null}
+          {errors.duration ? <p id="workout-duration-error" className="mt-2 text-sm text-error">{errors.duration}</p> : null}
         </div>
       </div>
     </section>

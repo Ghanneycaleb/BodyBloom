@@ -1,3 +1,4 @@
+import { compareWorkoutDates, formatWorkoutDate, getTodayDateString, isWorkoutDate, previousWorkoutDate } from './workout.dates'
 import type { Workout, WorkoutExercise, WorkoutSet } from './workout.types'
 
 export function getWorkoutVolume(workout: Workout): number {
@@ -37,30 +38,15 @@ export function getMostPerformedExercise(workouts: Workout[]): { exerciseName: s
   }
 }
 
-export function getCurrentStreak(workouts: Workout[]): number {
-  if (workouts.length === 0) {
-    return 0
-  }
-
-  const uniqueDates = new Set(
-    workouts
-      .map((workout) => new Date(workout.date).toISOString().slice(0, 10))
-      .filter((entry) => entry !== 'Invalid Date'),
-  )
-
-  if (uniqueDates.size === 0) {
-    return 0
-  }
-
-  const sortedDates = [...uniqueDates].sort((left, right) => new Date(right).getTime() - new Date(left).getTime())
-  const currentDate = new Date(sortedDates[0])
+export function getCurrentStreak(workouts: Workout[], today = getTodayDateString()): number {
+  if (!isWorkoutDate(today)) return 0
+  const dates = new Set(workouts.map((workout) => workout.date).filter(isWorkoutDate))
+  let day = dates.has(today) ? today : previousWorkoutDate(today)
   let streak = 0
-
-  while (uniqueDates.has(currentDate.toISOString().slice(0, 10))) {
+  while (dates.has(day)) {
     streak += 1
-    currentDate.setUTCDate(currentDate.getUTCDate() - 1)
+    day = previousWorkoutDate(day)
   }
-
   return streak
 }
 
@@ -68,7 +54,8 @@ export function getWorkoutActivity(workouts: Workout[]) {
   const totalsByDate = new Map<string, { date: string; count: number; volume: number }>()
 
   workouts.forEach((workout) => {
-    const dateKey = new Date(workout.date).toISOString().slice(0, 10)
+    if (!isWorkoutDate(workout.date)) return
+    const dateKey = workout.date
     const current = totalsByDate.get(dateKey) ?? { date: dateKey, count: 0, volume: 0 }
 
     current.count += 1
@@ -82,12 +69,12 @@ export function getWorkoutActivity(workouts: Workout[]) {
       date: entry.date,
       count: entry.count,
       volume: entry.volume,
-      label: new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(new Date(entry.date)),
+      label: formatWorkoutDate(entry.date, { month: 'short', day: 'numeric' }),
     }))
 }
 
 export function sortWorkoutsByDateDesc(workouts: Workout[]): Workout[] {
-  return [...workouts].sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime())
+  return workouts.filter((workout) => isWorkoutDate(workout.date)).sort((left, right) => compareWorkoutDates(right.date, left.date))
 }
 
 export function getRecentWorkouts(workouts: Workout[], limit = 4): Workout[] {

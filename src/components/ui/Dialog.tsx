@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useId, useRef, type ReactNode } from 'react'
 import { Button } from './Button'
 
 type DialogProps = {
@@ -22,48 +22,57 @@ export function Dialog({
   onConfirm,
   children,
 }: DialogProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null)
+  const cancelRef = useRef<HTMLButtonElement>(null)
+  const titleId = useId()
+  const descriptionId = useId()
+
   useEffect(() => {
-    if (!open) {
-      return undefined
+    if (!open) return
+    const dialog = dialogRef.current
+    const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const previousOverflow = document.body.style.overflow
+    dialog?.showModal()
+    cancelRef.current?.focus()
+    document.body.style.overflow = 'hidden'
+    return () => {
+      dialog?.close()
+      document.body.style.overflow = previousOverflow
+      if (trigger?.isConnected) trigger.focus()
     }
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose()
-      }
-    }
-
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [onClose, open])
-
-  if (!open) {
-    return null
-  }
+  }, [open])
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#151c27]/40 p-4 backdrop-blur-[2px]">
-      <div
-        role="dialog"
+      <dialog
+        ref={dialogRef}
         aria-modal="true"
-        aria-labelledby="dialog-title"
-        className="w-full max-w-md rounded-2xl border border-outline-variant/60 bg-surface-container-lowest p-5 shadow-soft"
+        aria-labelledby={titleId}
+        aria-describedby={description ? descriptionId : undefined}
+        onCancel={(event) => { event.preventDefault(); onClose() }}
+        onKeyDown={(event) => {
+          if (event.key !== 'Tab') return
+          const elements = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], [tabindex="0"]'))
+          const first = elements[0]
+          const last = elements[elements.length - 1]
+          if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus() }
+          else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus() }
+        }}
+        className="fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-2xl border border-outline-variant/60 bg-surface-container-lowest p-5 text-on-surface shadow-soft backdrop:bg-[#151c27]/40 backdrop:backdrop-blur-[2px]"
       >
         <div className="space-y-2">
-          <h2 id="dialog-title" className="text-xl font-semibold text-on-surface">{title}</h2>
-          {description ? <p className="text-sm leading-6 text-secondary">{description}</p> : null}
+          <h2 id={titleId} className="text-xl font-semibold text-on-surface">{title}</h2>
+          {description ? <p id={descriptionId} className="text-sm leading-6 text-secondary">{description}</p> : null}
           {children}
         </div>
 
         <div className="mt-6 flex justify-end gap-3">
-          <Button type="button" variant="secondary" onClick={onClose} className="min-w-24">
+          <Button ref={cancelRef} type="button" variant="secondary" onClick={onClose} className="min-w-24">
             {cancelText}
           </Button>
           <Button type="button" onClick={onConfirm} className="min-w-24">
             {confirmText}
           </Button>
         </div>
-      </div>
-    </div>
+      </dialog>
   )
 }

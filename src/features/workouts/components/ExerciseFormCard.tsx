@@ -56,13 +56,15 @@ export function ExerciseFormCard({
           </label>
           <input
             id={`exercise-name-${exercise.id}`}
-            list="starter-exercises"
+            list={`starter-exercises-${exercise.id}`}
+            aria-invalid={Boolean(exerciseErrors?.name)}
+            aria-describedby={exerciseErrors?.name ? `exercise-name-${exercise.id}-error` : undefined}
             value={exercise.exerciseName}
             onChange={(event) => onExerciseNameChange(exercise.id, event.target.value)}
             placeholder="Select or type an exercise"
-            className="min-h-14 w-full rounded-md border border-outline-variant bg-surface-container-low px-4 text-base text-on-surface outline-none transition-colors placeholder:text-secondary focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className="min-h-14 min-w-0 w-full rounded-md border border-outline-variant bg-surface-container-low px-4 text-base text-on-surface outline-none transition-colors placeholder:text-secondary focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
-          {exerciseErrors?.name ? <p className="mt-2 text-sm text-error">{exerciseErrors.name}</p> : null}
+          {exerciseErrors?.name ? <p id={`exercise-name-${exercise.id}-error`} className="mt-2 text-sm text-error">{exerciseErrors.name}</p> : null}
         </div>
 
         <div>
@@ -88,7 +90,7 @@ export function ExerciseFormCard({
         />
       </div>
 
-      <datalist id="starter-exercises">
+      <datalist id={`starter-exercises-${exercise.id}`}>
         {nameOptions.map((option) => (
           <option key={option} value={option} />
         ))}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/ui/Button'
 import { Dialog } from '../../components/ui/Dialog'
@@ -7,25 +7,38 @@ import { ExerciseFormCard } from './components/ExerciseFormCard'
 import { SaveWorkoutBar } from './components/SaveWorkoutBar'
 import { WorkoutDetailsForm } from './components/WorkoutDetailsForm'
 import { WorkoutSummary } from './components/WorkoutSummary'
-import { buildWorkoutFromForm, calculateWorkoutSummary, createDefaultWorkoutForm, validateWorkoutForm, type WorkoutFormValues } from './workout.form'
+import { buildWorkoutFromForm, calculateWorkoutSummary, createDefaultWorkoutForm, createEmptyExercise, createEmptySet, isWorkoutFormDirty, validateWorkoutForm, type WorkoutFormErrors, type WorkoutFormValues } from './workout.form'
 
 export function LogWorkoutPage() {
   const navigate = useNavigate()
   const { addWorkout } = useWorkouts()
-  const [form, setForm] = useState<WorkoutFormValues>(() => createDefaultWorkoutForm())
+  const [initialForm] = useState(() => createDefaultWorkoutForm())
+  const [form, setForm] = useState<WorkoutFormValues>(initialForm)
   const [showDiscardDialog, setShowDiscardDialog] = useState(false)
-  const [successMessage, setSuccessMessage] = useState('')
+  const [saveError, setSaveError] = useState('')
+  const [submitted, setSubmitted] = useState(false)
+  const [touched, setTouched] = useState<Set<string>>(() => new Set())
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const saving = useRef(false)
+  const formRef = useRef<HTMLFormElement>(null)
 
   const errors = useMemo(() => validateWorkoutForm(form), [form])
   const summary = useMemo(() => calculateWorkoutSummary(form), [form])
-  const hasAnyInput = form.date !== '' || form.duration !== '45' || form.exercises.some((exercise) =>
-    exercise.exerciseName.trim() !== '' || exercise.muscleGroup.trim() !== '' || exercise.sets.some((set) => set.reps !== '10' || set.weight !== '0'))
-
-  const isFormValid = Object.keys(errors).length === 0
+  const hasAnyInput = isWorkoutFormDirty(form, initialForm)
+  const visibleErrors: WorkoutFormErrors = {
+    date: submitted || touched.has('workout-date') ? errors.date : undefined,
+    duration: submitted || touched.has('workout-duration') ? errors.duration : undefined,
+    exercises: submitted || hasAnyInput ? errors.exercises : undefined,
+    exerciseErrors: Object.fromEntries(form.exercises.map((exercise) => [exercise.id, {
+      name: submitted || touched.has(`exercise-name-${exercise.id}`) ? errors.exerciseErrors?.[exercise.id]?.name : undefined,
+      sets: Object.fromEntries(Object.entries(errors.exerciseErrors?.[exercise.id]?.sets ?? {}).filter(([setId]) =>
+        submitted || touched.has(`exercise-${exercise.id}-set-${setId}-reps`) || touched.has(`exercise-${exercise.id}-set-${setId}-weight`))),
+    }])),
+  }
 
   const updateField = (field: 'date' | 'duration', value: string) => {
     setForm((current) => ({ ...current, [field]: value }))
-    setSuccessMessage('')
+    setSaveError('')
   }
 
   const updateExerciseName = (exerciseId: string, value: string) => {
@@ -35,7 +48,7 @@ export function LogWorkoutPage() {
         exercise.id === exerciseId ? { ...exercise, exerciseName: value } : exercise,
       ),
     }))
-    setSuccessMessage('')
+    setSaveError('')
   }
 
   const updateExerciseMuscleGroup = (exerciseId: string, value: string) => {
@@ -45,7 +58,7 @@ export function LogWorkoutPage() {
         exercise.id === exerciseId ? { ...exercise, muscleGroup: value } : exercise,
       ),
     }))
-    setSuccessMessage('')
+    setSaveError('')
   }
 
   const updateSetValue = (exerciseId: string, setId: string, field: 'reps' | 'weight', value: string) => {
@@ -62,15 +75,15 @@ export function LogWorkoutPage() {
         }
       }),
     }))
-    setSuccessMessage('')
+    setSaveError('')
   }
 
   const addExercise = () => {
     setForm((current) => ({
       ...current,
-      exercises: [...current.exercises, { id: crypto.randomUUID(), exerciseName: '', muscleGroup: '', sets: [{ id: crypto.randomUUID(), reps: '10', weight: '0' }] }],
+      exercises: [...current.exercises, createEmptyExercise()],
     }))
-    setSuccessMessage('')
+    setSaveError('')
   }
 
   const removeExercise = (exerciseId: string) => {
@@ -78,17 +91,17 @@ export function LogWorkoutPage() {
       ...current,
       exercises: current.exercises.filter((exercise) => exercise.id !== exerciseId),
     }))
-    setSuccessMessage('')
+    setSaveError('')
   }
 
   const addSet = (exerciseId: string) => {
     setForm((current) => ({
       ...current,
       exercises: current.exercises.map((exercise) =>
-        exercise.id === exerciseId ? { ...exercise, sets: [...exercise.sets, { id: crypto.randomUUID(), reps: '10', weight: '0' }] } : exercise,
+        exercise.id === exerciseId ? { ...exercise, sets: [...exercise.sets, createEmptySet()] } : exercise,
       ),
     }))
-    setSuccessMessage('')
+    setSaveError('')
   }
 
   const removeSet = (exerciseId: string, setId: string) => {
@@ -102,26 +115,45 @@ export function LogWorkoutPage() {
         return { ...exercise, sets: exercise.sets.length > 1 ? exercise.sets.filter((set) => set.id !== setId) : exercise.sets }
       }),
     }))
-    setSuccessMessage('')
+    setSaveError('')
   }
 
-  const handleSave = () => {
-    const validationErrors = validateWorkoutForm(form)
-
-    if (Object.keys(validationErrors).length > 0) {
-      setSuccessMessage('')
+  const handleSave = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (saving.current) return
+    setSubmitted(true)
+    setSaveError('')
+    if (Object.keys(validateWorkoutForm(form)).length > 0) {
+      requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
       return
     }
+    saving.current = true
+    setIsSubmitting(true)
+    // Allow the pending state to paint before synchronous browser persistence.
+    await new Promise<void>((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)))
+    try {
+      addWorkout(buildWorkoutFromForm(form))
+      await navigate('/', { replace: true, state: { workoutSaved: true } })
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Workout could not be saved. Please try again.')
+      saving.current = false
+      setIsSubmitting(false)
+    }
+  }
 
-    const workout = buildWorkoutFromForm(form)
-    addWorkout(workout)
-    setSuccessMessage('Workout saved successfully.')
-    navigate('/')
+  const leaveForm = () => {
+    const historyState: unknown = window.history.state
+    if (typeof historyState === 'object' && historyState !== null && 'idx' in historyState &&
+        typeof historyState.idx === 'number' && historyState.idx > 0) {
+      navigate(-1)
+    } else {
+      navigate('/', { replace: true })
+    }
   }
 
   const handleCancel = () => {
     if (!hasAnyInput) {
-      navigate(-1)
+      leaveForm()
       return
     }
 
@@ -130,33 +162,38 @@ export function LogWorkoutPage() {
 
   const confirmDiscard = () => {
     setShowDiscardDialog(false)
-    navigate(-1)
+    leaveForm()
   }
 
-  const exerciseErrorMap = errors.exerciseErrors ?? {}
+  const exerciseErrorMap = visibleErrors.exerciseErrors ?? {}
 
   return (
     <div className="space-y-6">
       <header className="space-y-2">
         <p className="text-sm font-semibold uppercase tracking-[0.14em] text-primary">Training log</p>
-        <h1 className="text-3xl font-bold tracking-tight text-on-surface md:text-4xl">Log Workout</h1>
+        <h2 className="text-3xl font-bold tracking-tight text-on-surface md:text-4xl">Log Workout</h2>
         <p className="max-w-2xl text-base leading-7 text-secondary">
           Capture the details of your training session and keep your momentum moving.
         </p>
       </header>
 
-      {successMessage ? (
-        <div className="rounded-xl border border-primary/20 bg-primary/8 px-4 py-3 text-sm font-medium text-primary">
-          {successMessage}
+      {saveError ? (
+        <div role="alert" className="rounded-xl border border-error/30 bg-surface-container-lowest px-4 py-3 text-sm font-medium text-error">
+          {saveError}
         </div>
       ) : null}
 
-      <div className="grid gap-6 xl:grid-cols-[1.5fr_0.9fr]">
+      <form ref={formRef} noValidate onSubmit={handleSave} aria-busy={isSubmitting}
+        onBlurCapture={(event) => {
+          const id = event.target.id
+          if (id) setTouched((current) => new Set(current).add(id))
+        }}>
+      <fieldset disabled={isSubmitting} className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,0.9fr)]">
         <div className="space-y-5">
           <WorkoutDetailsForm
             date={form.date}
             duration={form.duration}
-            errors={errors}
+            errors={visibleErrors}
             onDateChange={(value) => updateField('date', value)}
             onDurationChange={(value) => updateField('duration', value)}
           />
@@ -185,20 +222,20 @@ export function LogWorkoutPage() {
               ))}
             </div>
 
-            {errors.exercises ? <p className="text-sm text-error">{errors.exercises}</p> : null}
+            {visibleErrors.exercises ? <p role="alert" className="text-sm text-error">{visibleErrors.exercises}</p> : null}
           </section>
 
           <SaveWorkoutBar
-            isValid={isFormValid}
+            isSubmitting={isSubmitting}
             onCancel={handleCancel}
-            onSave={handleSave}
           />
         </div>
 
         <div className="xl:pt-2">
           <WorkoutSummary summary={summary} />
         </div>
-      </div>
+      </fieldset>
+      </form>
 
       <Dialog
         open={showDiscardDialog}

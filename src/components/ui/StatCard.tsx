@@ -16,7 +16,7 @@ export function StatCard({ label, value, detail, icon }: StatCardProps) {
         {icon && <span className="text-primary" aria-hidden="true">{icon}</span>}
       </div>
       <div>
-        <p className="text-3xl font-bold tracking-tight text-on-surface">{value}</p>
+        <p className="break-words text-3xl font-bold tracking-tight text-on-surface">{value}</p>
         {detail && <p className="mt-1 text-xs text-secondary">{detail}</p>}
       </div>
     </Card>

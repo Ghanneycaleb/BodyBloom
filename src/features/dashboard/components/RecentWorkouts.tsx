@@ -1,3 +1,4 @@
+import { formatWorkoutDate } from '../../workouts/workout.dates'
 import { CalendarDays, Clock3, Dumbbell } from 'lucide-react'
 import { Card } from '../../../components/ui/Card'
 import { getWorkoutVolume } from '../../workouts/workout.calculations'
@@ -27,7 +28,7 @@ export function RecentWorkouts({ workouts }: RecentWorkoutsProps) {
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm font-semibold text-on-surface">
                 <CalendarDays size={16} className="text-primary" aria-hidden="true" />
-                {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(workout.date))}
+                {formatWorkoutDate(workout.date)}
               </div>
               <div className="flex flex-wrap gap-4 text-sm text-secondary">
                 <span className="inline-flex items-center gap-1.5">
