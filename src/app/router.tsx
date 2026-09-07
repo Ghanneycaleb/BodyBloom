@@ -1,0 +1,19 @@
+import { createBrowserRouter } from 'react-router-dom'
+import { AppShell } from '../components/layout/AppShell'
+import { DashboardPage } from '../features/dashboard/DashboardPage'
+import { LogWorkoutPage } from '../features/workouts/LogWorkoutPage'
+import { PlaceholderPage } from '../pages/PlaceholderPage'
+
+export const router = createBrowserRouter([
+  {
+    element: <AppShell />,
+    children: [
+      { path: '/', element: <DashboardPage /> },
+      { path: '/log-workout', element: <LogWorkoutPage /> },
+      { path: '/history', element: <PlaceholderPage title="Workout History" description="Your completed workouts will live here." /> },
+      { path: '/exercises', element: <PlaceholderPage title="Exercises" description="The exercise library will live here." /> },
+      { path: '/progress', element: <PlaceholderPage title="Progress" description="Your progress insights will live here." /> },
+      { path: '/motivation', element: <PlaceholderPage title="Motivation" description="Your motivation hub will live here." /> },
+    ],
+  },
+])
