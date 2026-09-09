@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react'
 import { Button } from './Button'
+import { X } from 'lucide-react'
 
 type DialogProps = {
   open: boolean
@@ -8,7 +9,8 @@ type DialogProps = {
   confirmText?: string
   cancelText?: string
   onClose: () => void
-  onConfirm: () => void
+  onConfirm?: () => void
+  size?: 'default' | 'wide'
   children?: ReactNode
 }
 
@@ -20,6 +22,7 @@ export function Dialog({
   cancelText = 'Cancel',
   onClose,
   onConfirm,
+  size = 'default',
   children,
 }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -33,7 +36,8 @@ export function Dialog({
     const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null
     const previousOverflow = document.body.style.overflow
     dialog?.showModal()
-    cancelRef.current?.focus()
+    cancelRef.current?.focus({ preventScroll: true })
+    if (dialog) dialog.scrollTop = 0
     document.body.style.overflow = 'hidden'
     return () => {
       dialog?.close()
@@ -57,21 +61,24 @@ export function Dialog({
           if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus() }
           else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus() }
         }}
-        className="fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-2xl border border-outline-variant/60 bg-surface-container-lowest p-5 text-on-surface shadow-soft backdrop:bg-[#151c27]/40 backdrop:backdrop-blur-[2px]"
+        className={`fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] ${size === 'wide' ? 'max-w-2xl' : 'max-w-md'} overflow-y-auto rounded-2xl border border-outline-variant/60 bg-surface-container-lowest p-5 text-on-surface shadow-soft backdrop:bg-[#151c27]/40 backdrop:backdrop-blur-[2px]`}
       >
         <div className="space-y-2">
-          <h2 id={titleId} className="text-xl font-semibold text-on-surface">{title}</h2>
+          <div className="flex items-start justify-between gap-3">
+            <h2 id={titleId} className="min-w-0 break-words text-xl font-semibold text-on-surface">{title}</h2>
+            {!onConfirm && <button ref={cancelRef} type="button" onClick={onClose} aria-label="Close dialog" className="flex size-11 shrink-0 items-center justify-center rounded-lg text-secondary hover:bg-surface-container-low focus-visible:outline-2 focus-visible:outline-primary"><X size={20} aria-hidden="true" /></button>}
+          </div>
           {description ? <p id={descriptionId} className="text-sm leading-6 text-secondary">{description}</p> : null}
           {children}
         </div>
 
         <div className="mt-6 flex justify-end gap-3">
-          <Button ref={cancelRef} type="button" variant="secondary" onClick={onClose} className="min-w-24">
+          <Button ref={onConfirm ? cancelRef : undefined} type="button" variant="secondary" onClick={onClose} className="min-w-24">
             {cancelText}
           </Button>
-          <Button type="button" onClick={onConfirm} className="min-w-24">
+          {onConfirm && <Button type="button" onClick={onConfirm} className="min-w-24">
             {confirmText}
-          </Button>
+          </Button>}
         </div>
       </dialog>
   )

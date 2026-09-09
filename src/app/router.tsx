@@ -1,4 +1,5 @@
 import { WorkoutHistoryPage } from '../features/history/WorkoutHistoryPage'
+import { ExerciseExplorerPage } from '../features/exercises/ExerciseExplorerPage'
 import { EditWorkoutPage } from '../features/workouts/EditWorkoutPage'
 import { createBrowserRouter } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
@@ -14,7 +15,7 @@ export const router = createBrowserRouter([
       { path: '/log-workout', element: <LogWorkoutPage /> },
       { path: '/history', element: <WorkoutHistoryPage /> },
       { path: '/history/:workoutId/edit', element: <EditWorkoutPage /> },
-      { path: '/exercises', element: <PlaceholderPage title="Exercises" description="The exercise library will live here." /> },
+      { path: '/exercises', element: <ExerciseExplorerPage /> },
       { path: '/progress', element: <PlaceholderPage title="Progress" description="Your progress insights will live here." /> },
       { path: '/motivation', element: <PlaceholderPage title="Motivation" description="Your motivation hub will live here." /> },
     ],
