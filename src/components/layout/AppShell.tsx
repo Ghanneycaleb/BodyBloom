@@ -6,10 +6,10 @@ import { navigationItems } from './navigation'
 
 export function AppShell() {
   const location = useLocation()
-  const currentPage = navigationItems.find((item) => item.path === location.pathname)?.label ?? 'Dashboard'
+  const currentPage = location.pathname.startsWith('/history/') ? 'Edit Workout' : navigationItems.find((item) => item.path === location.pathname)?.label ?? 'Dashboard'
 
   return (
-    <div className="min-h-screen bg-background text-on-background">
+    <div className="min-h-screen bg-background text-on-surface">
       <Sidebar />
       <div className="lg:pl-70">
         <TopBar title={currentPage} />

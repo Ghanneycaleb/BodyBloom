@@ -8,7 +8,7 @@ export function BottomNav() {
   return (
     <nav aria-label="Mobile navigation" className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-outline-variant/40 bg-surface/95 px-2 pb-[env(safe-area-inset-bottom)] pt-2 shadow-[0_-4px_20px_rgba(0,0,0,0.04)] backdrop-blur lg:hidden">
       {mobileItems.map(({ label, path, icon: Icon }) => {
-        const isActive = location.pathname === path
+        const isActive = location.pathname === path || (path === '/history' && location.pathname.startsWith('/history/'))
         return (
           <Link
             key={path}

@@ -81,11 +81,15 @@ export function addWorkout(workout: Workout): Workout[] {
 }
 
 export function updateWorkout(id: string, updates: Partial<Workout>): Workout[] {
-  const nextWorkouts = getWorkouts().map((workout) =>
+  const workouts = getWorkouts()
+  if (!workouts.some((workout) => workout.id === id)) throw new Error('This workout no longer exists. Return to History to view your current workouts.')
+  const nextWorkouts = workouts.map((workout) =>
     workout.id === id
       ? {
           ...workout,
           ...updates,
+          id: workout.id,
+          createdAt: workout.createdAt,
           updatedAt: new Date().toISOString(),
         }
       : workout,
@@ -96,7 +100,9 @@ export function updateWorkout(id: string, updates: Partial<Workout>): Workout[] 
 }
 
 export function deleteWorkout(id: string): Workout[] {
-  const nextWorkouts = getWorkouts().filter((workout) => workout.id !== id)
+  const workouts = getWorkouts()
+  if (!workouts.some((workout) => workout.id === id)) throw new Error('This workout no longer exists. Refresh History to view your current workouts.')
+  const nextWorkouts = workouts.filter((workout) => workout.id !== id)
   saveWorkouts(nextWorkouts)
   return nextWorkouts
 }

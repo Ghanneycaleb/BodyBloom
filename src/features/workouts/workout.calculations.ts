@@ -1,10 +1,12 @@
 import { compareWorkoutDates, formatWorkoutDate, getTodayDateString, isWorkoutDate, previousWorkoutDate } from './workout.dates'
 import type { Workout, WorkoutExercise, WorkoutSet } from './workout.types'
 
+export function getExerciseVolume(exercise: WorkoutExercise): number {
+  return exercise.sets.reduce((total, set) => total + set.weight * set.reps, 0)
+}
+
 export function getWorkoutVolume(workout: Workout): number {
-  return workout.exercises.reduce((exerciseTotal, exercise) => {
-    return exerciseTotal + exercise.sets.reduce((setTotal, set) => setTotal + set.weight * set.reps, 0)
-  }, 0)
+  return workout.exercises.reduce((total, exercise) => total + getExerciseVolume(exercise), 0)
 }
 
 export function getTotalVolume(workouts: Workout[]): number {
@@ -74,7 +76,11 @@ export function getWorkoutActivity(workouts: Workout[]) {
 }
 
 export function sortWorkoutsByDateDesc(workouts: Workout[]): Workout[] {
-  return workouts.filter((workout) => isWorkoutDate(workout.date)).sort((left, right) => compareWorkoutDates(right.date, left.date))
+  return workouts.filter((workout) => isWorkoutDate(workout.date)).sort((left, right) => {
+    const dateOrder = compareWorkoutDates(right.date, left.date)
+    const createdOrder = (Date.parse(right.createdAt) || 0) - (Date.parse(left.createdAt) || 0)
+    return dateOrder || createdOrder || left.id.localeCompare(right.id)
+  })
 }
 
 export function getRecentWorkouts(workouts: Workout[], limit = 4): Workout[] {
@@ -109,6 +115,6 @@ export function getDisplayWorkoutVolume(workout: Workout): number {
 }
 
 export function getExerciseSummary(exercise: WorkoutExercise): string {
-  const setSummary = exercise.sets.reduce((summary, set: WorkoutSet) => summary + `${set.reps}×${set.weight}kg, `, '')
+  const setSummary = exercise.sets.reduce((summary, set: WorkoutSet) => summary + `${set.reps}Ã—${set.weight}kg, `, '')
   return setSummary.replace(/, $/, '')
 }

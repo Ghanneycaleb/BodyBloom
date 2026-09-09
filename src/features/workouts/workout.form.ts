@@ -9,6 +9,7 @@ export type WorkoutSetForm = {
 
 export type WorkoutExerciseForm = {
   id: string
+  exerciseId?: string
   exerciseName: string
   muscleGroup: string
   sets: WorkoutSetForm[]
@@ -153,7 +154,7 @@ export function validateWorkoutForm(form: WorkoutFormValues): WorkoutFormErrors 
   return errors
 }
 
-export function buildWorkoutFromForm(form: WorkoutFormValues): Workout {
+export function buildWorkoutFromForm(form: WorkoutFormValues, existing?: Workout): Workout {
   if (Object.keys(validateWorkoutForm(form)).length) throw new Error('Please correct the workout fields before saving.')
   const now = new Date().toISOString()
 
@@ -164,7 +165,7 @@ export function buildWorkoutFromForm(form: WorkoutFormValues): Workout {
     }))
 
     return {
-      exerciseId: crypto.randomUUID(),
+      exerciseId: exercise.exerciseId ?? crypto.randomUUID(),
       exerciseName: exercise.exerciseName.trim() || 'Exercise',
       muscleGroup: exercise.muscleGroup.trim() || 'General',
       sets,
@@ -172,11 +173,11 @@ export function buildWorkoutFromForm(form: WorkoutFormValues): Workout {
   })
 
   return {
-    id: crypto.randomUUID(),
+    id: existing?.id ?? crypto.randomUUID(),
     date: form.date,
     duration: Number(form.duration),
     exercises,
-    createdAt: now,
+    createdAt: existing?.createdAt ?? now,
     updatedAt: now,
   }
 }
@@ -190,4 +191,19 @@ export function isWorkoutFormDirty(form: WorkoutFormValues, initial: WorkoutForm
     })),
   })
   return content(form) !== content(initial)
+}
+
+/** UI row IDs stay separate from persisted exercise identity. */
+export function workoutToFormValues(workout: Workout): WorkoutFormValues {
+  return {
+    date: workout.date,
+    duration: String(workout.duration),
+    exercises: workout.exercises.map((exercise) => ({
+      id: crypto.randomUUID(),
+      exerciseId: exercise.exerciseId,
+      exerciseName: exercise.exerciseName,
+      muscleGroup: exercise.muscleGroup,
+      sets: exercise.sets.map((set) => ({ id: crypto.randomUUID(), reps: String(set.reps), weight: String(set.weight) })),
+    })),
+  }
 }

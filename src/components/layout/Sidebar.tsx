@@ -20,7 +20,7 @@ export function Sidebar() {
 
       <nav aria-label="Primary navigation" className="flex-1 space-y-1 px-3 py-4">
         {navigationItems.map(({ label, path, icon: Icon }) => {
-          const isActive = location.pathname === path
+          const isActive = location.pathname === path || (path === '/history' && location.pathname.startsWith('/history/'))
           return (
             <Link
               key={path}
