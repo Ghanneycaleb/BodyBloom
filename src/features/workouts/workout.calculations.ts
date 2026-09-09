@@ -13,7 +13,8 @@ export function getTotalVolume(workouts: Workout[]): number {
   return workouts.reduce((total, workout) => total + getWorkoutVolume(workout), 0)
 }
 
-export function getMostPerformedExercise(workouts: Workout[]): { exerciseName: string; count: number } {
+/** Canonical name identity: count each logged exercise entry, regardless of set count. */
+export function getExerciseFrequency(workouts: Workout[]): { exerciseName: string; count: number }[] {
   const counts = new Map<string, number>()
 
   workouts.forEach((workout) => {
@@ -22,22 +23,17 @@ export function getMostPerformedExercise(workouts: Workout[]): { exerciseName: s
     })
   })
 
-  const mostPerformed = [...counts.entries()].sort((left, right) => {
+  return [...counts.entries()].sort((left, right) => {
     if (right[1] !== left[1]) {
       return right[1] - left[1]
     }
 
     return left[0].localeCompare(right[0])
-  })[0]
+  }).map(([exerciseName, count]) => ({ exerciseName, count }))
+}
 
-  if (!mostPerformed) {
-    return { exerciseName: 'No exercises logged', count: 0 }
-  }
-
-  return {
-    exerciseName: mostPerformed[0],
-    count: mostPerformed[1],
-  }
+export function getMostPerformedExercise(workouts: Workout[]): { exerciseName: string; count: number } {
+  return getExerciseFrequency(workouts)[0] ?? { exerciseName: 'No exercises logged', count: 0 }
 }
 
 export function getCurrentStreak(workouts: Workout[], today = getTodayDateString()): number {
