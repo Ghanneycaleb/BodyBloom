@@ -1,12 +1,12 @@
 import { WorkoutHistoryPage } from '../features/history/WorkoutHistoryPage'
 import { ExerciseExplorerPage } from '../features/exercises/ExerciseExplorerPage'
 import { ProgressPage } from '../features/progress/ProgressPage'
+import { MotivationPage } from '../features/motivation/MotivationPage'
 import { EditWorkoutPage } from '../features/workouts/EditWorkoutPage'
 import { createBrowserRouter } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
 import { DashboardPage } from '../features/dashboard/DashboardPage'
 import { LogWorkoutPage } from '../features/workouts/LogWorkoutPage'
-import { PlaceholderPage } from '../pages/PlaceholderPage'
 
 export const router = createBrowserRouter([
   {
@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
       { path: '/history/:workoutId/edit', element: <EditWorkoutPage /> },
       { path: '/exercises', element: <ExerciseExplorerPage /> },
       { path: '/progress', element: <ProgressPage /> },
-      { path: '/motivation', element: <PlaceholderPage title="Motivation" description="Your motivation hub will live here." /> },
+      { path: '/motivation', element: <MotivationPage /> },
     ],
   },
 ])
