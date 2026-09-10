@@ -1,5 +1,6 @@
 import type { Workout, WorkoutExercise } from './workout.types'
 import { isWorkoutDate } from './workout.dates'
+import { normalizeExternalExercise } from './workout.external'
 
 const STORAGE_KEY = 'bodybloom.workouts'
 
@@ -24,7 +25,9 @@ function normalizeWorkoutRecord(value: unknown): Workout | null {
           !Number.isFinite(set.reps * set.weight)) return null
       sets.push({ reps: set.reps, weight: set.weight })
     }
-    exercises.push({ exerciseId: exercise.exerciseId, exerciseName: exercise.exerciseName, muscleGroup: exercise.muscleGroup, sets })
+    const externalExercise = normalizeExternalExercise(exercise.externalExercise)
+    exercises.push({ exerciseId: exercise.exerciseId, exerciseName: exercise.exerciseName, muscleGroup: exercise.muscleGroup, sets,
+      ...(externalExercise ? { externalExercise } : {}) })
   }
   // Legacy records may lack identity/timestamps; never invent exercise content.
   const now = new Date().toISOString()

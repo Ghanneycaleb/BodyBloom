@@ -1,11 +1,13 @@
 import { Dumbbell, Trash2 } from 'lucide-react'
 import { Card } from '../../../components/ui/Card'
+import { Button } from '../../../components/ui/Button'
 import { Input } from '../../../components/ui/Input'
 import { starterExercises } from '../workout.data'
 import type { WorkoutExerciseForm, WorkoutFormExerciseErrors } from '../workout.form'
 import { ExerciseSetTable } from './ExerciseSetTable'
 
 type ExerciseFormCardProps = {
+  onChooseExercise: (exerciseId: string) => void
   exercise: WorkoutExerciseForm
   exerciseErrors?: WorkoutFormExerciseErrors
   onExerciseNameChange: (exerciseId: string, value: string) => void
@@ -25,6 +27,7 @@ export function ExerciseFormCard({
   onAddSet,
   onRemoveSet,
   onRemoveExercise,
+  onChooseExercise,
 }: ExerciseFormCardProps) {
   const nameOptions = starterExercises.map((item) => item.value)
 
@@ -49,6 +52,10 @@ export function ExerciseFormCard({
         </button>
       </div>
 
+      <div className="mb-4 space-y-2">
+        <Button type="button" variant="secondary" onClick={() => onChooseExercise(exercise.id)} aria-label={`Choose WGER exercise for ${exercise.exerciseName || 'this exercise'}`}>Choose from WGER</Button>
+        <p className="text-xs text-secondary">{exercise.externalExercise ? 'Selected from WGER. Renaming makes this a custom exercise.' : 'Or type a custom exercise or use a starter suggestion below.'}</p>
+      </div>
       <div className="grid gap-4 md:grid-cols-2">
         <div>
           <label htmlFor={`exercise-name-${exercise.id}`} className="mb-2 block text-sm font-medium text-on-surface">

@@ -4,6 +4,7 @@ export type WorkoutSet = {
 }
 
 export type WorkoutExercise = {
+  externalExercise?: { source: 'wger'; sourceId: number }
   exerciseId: string
   exerciseName: string
   muscleGroup: string

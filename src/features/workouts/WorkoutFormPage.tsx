@@ -1,6 +1,8 @@
 import type { Workout } from './workout.types'
 import { useMemo, useRef, useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ExercisePickerDialog } from './components/ExercisePickerDialog'
+import { applyExerciseSelection, normalizeExerciseRouteState, renameWorkoutExercise, type ExerciseSelection } from './workout.external'
 import { Button } from '../../components/ui/Button'
 import { Dialog } from '../../components/ui/Dialog'
 import { useWorkouts } from './useWorkouts'
@@ -12,10 +14,15 @@ import { buildWorkoutFromForm, calculateWorkoutSummary, createDefaultWorkoutForm
 
 export function WorkoutFormPage({ workout }: { workout?: Workout }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const { addWorkout, updateWorkout } = useWorkouts()
   const isEditing = Boolean(workout)
   const [initialForm] = useState(() => workout ? workoutToFormValues(workout) : createDefaultWorkoutForm())
-  const [form, setForm] = useState<WorkoutFormValues>(initialForm)
+  const [form, setForm] = useState<WorkoutFormValues>(() => {
+    const selection = !workout && normalizeExerciseRouteState(location.state)
+    return selection ? { ...initialForm, exercises: [applyExerciseSelection(initialForm.exercises[0], selection)] } : initialForm
+  })
+  const [pickerTarget, setPickerTarget] = useState<string | null>(null)
   const [showDiscardDialog, setShowDiscardDialog] = useState(false)
   const [saveError, setSaveError] = useState('')
   const [submitted, setSubmitted] = useState(false)
@@ -47,7 +54,7 @@ export function WorkoutFormPage({ workout }: { workout?: Workout }) {
     setForm((current) => ({
       ...current,
       exercises: current.exercises.map((exercise) =>
-        exercise.id === exerciseId ? { ...exercise, exerciseName: value } : exercise,
+        exercise.id === exerciseId ? renameWorkoutExercise(exercise, value) : exercise,
       ),
     }))
     setSaveError('')
@@ -86,6 +93,14 @@ export function WorkoutFormPage({ workout }: { workout?: Workout }) {
       exercises: [...current.exercises, createEmptyExercise()],
     }))
     setSaveError('')
+  }
+
+  const selectExercise = (selection: ExerciseSelection) => {
+    setForm((current) => ({ ...current, exercises: pickerTarget === 'new'
+      ? [...current.exercises, applyExerciseSelection(createEmptyExercise(), selection)]
+      : current.exercises.map((row) => row.id === pickerTarget ? applyExerciseSelection(row, selection) : row) }))
+    setSaveError('')
+    setPickerTarget(null)
   }
 
   const removeExercise = (exerciseId: string) => {
@@ -213,7 +228,7 @@ export function WorkoutFormPage({ workout }: { workout?: Workout }) {
           <section className="space-y-4 rounded-2xl border border-outline-variant/60 bg-surface-container-lowest p-4 shadow-soft md:p-5">
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-lg font-semibold text-on-surface">Exercises</h2>
-              <Button type="button" onClick={addExercise} className="min-h-11 px-4 py-2 text-sm">
+              <Button type="button" onClick={() => setPickerTarget('new')} className="min-h-11 px-4 py-2 text-sm">
                 + Add Exercise
               </Button>
             </div>
@@ -230,6 +245,7 @@ export function WorkoutFormPage({ workout }: { workout?: Workout }) {
                   onAddSet={addSet}
                   onRemoveSet={removeSet}
                   onRemoveExercise={removeExercise}
+                  onChooseExercise={(id) => setPickerTarget(id)}
                 />
               ))}
             </div>
@@ -249,6 +265,14 @@ export function WorkoutFormPage({ workout }: { workout?: Workout }) {
         </div>
       </fieldset>
       </form>
+
+      {pickerTarget !== null && <ExercisePickerDialog onClose={() => setPickerTarget(null)} onSelect={selectExercise}
+        onManual={() => {
+          if (pickerTarget === 'new') addExercise()
+          const target = pickerTarget
+          setPickerTarget(null)
+          if (target !== 'new') requestAnimationFrame(() => document.getElementById(`exercise-name-${target}`)?.focus())
+        }} />}
 
       <Dialog
         open={showDiscardDialog}

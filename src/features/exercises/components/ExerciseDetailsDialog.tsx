@@ -1,4 +1,7 @@
 import { Dialog } from '../../../components/ui/Dialog'
+import { useNavigate } from 'react-router-dom'
+import { Button } from '../../../components/ui/Button'
+import { selectionFromExercise } from '../../workouts/workout.external'
 import { ExerciseImage } from './ExerciseImage'
 import { WGER_API } from '../exercise.api'
 import type { Exercise, ExerciseLicense } from '../exercise.types'
@@ -8,8 +11,10 @@ function Attribution({ label, author, licenseId, licenses }: { label: string; au
   return <p>{label}: {author || 'WGER contributors'}{license && <> · {license.url ? <a href={license.url} target="_blank" rel="noreferrer" className="underline focus-visible:outline-2 focus-visible:outline-primary">{license.name}</a> : license.name}</>}</p>
 }
 export function ExerciseDetailsDialog({ exercise, licenses, onClose }: { exercise: Exercise | null; licenses: ExerciseLicense[]; onClose: () => void }) {
+  const navigate = useNavigate()
   return <Dialog open={exercise !== null} title={exercise?.name ?? 'Exercise details'} cancelText="Close" onClose={onClose} size="wide">
     {exercise && <div className="space-y-5 pt-3">
+      <Button type="button" onClick={() => navigate('/log-workout', { state: { exerciseSelection: selectionFromExercise(exercise) } })}>Log this exercise</Button>
       <div className="mx-auto max-w-sm overflow-hidden rounded-xl"><ExerciseImage key={exercise.sourceId} exercise={exercise} eager /></div>
       <dl className="grid gap-4 text-sm sm:grid-cols-2">
         {[['Category', exercise.category], ['Primary muscles', exercise.muscles.join(', ') || 'Not specified'], ['Secondary muscles', exercise.secondaryMuscles.join(', ') || 'Not specified'], ['Equipment', exercise.equipment.join(', ') || 'Not specified']].map(([label, value]) => <div key={label} className="min-w-0"><dt className="font-semibold">{label}</dt><dd className="mt-1 break-words leading-6 text-secondary">{value}</dd></div>)}

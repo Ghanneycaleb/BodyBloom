@@ -8,6 +8,7 @@ export type WorkoutSetForm = {
 }
 
 export type WorkoutExerciseForm = {
+  externalExercise?: WorkoutExercise['externalExercise']
   id: string
   exerciseId?: string
   exerciseName: string
@@ -166,6 +167,7 @@ export function buildWorkoutFromForm(form: WorkoutFormValues, existing?: Workout
 
     return {
       exerciseId: exercise.exerciseId ?? crypto.randomUUID(),
+      ...(exercise.externalExercise ? { externalExercise: { ...exercise.externalExercise } } : {}),
       exerciseName: exercise.exerciseName.trim() || 'Exercise',
       muscleGroup: exercise.muscleGroup.trim() || 'General',
       sets,
@@ -187,6 +189,7 @@ export function isWorkoutFormDirty(form: WorkoutFormValues, initial: WorkoutForm
     date: value.date, duration: value.duration,
     exercises: value.exercises.map((exercise) => ({
       exerciseName: exercise.exerciseName, muscleGroup: exercise.muscleGroup,
+      externalExercise: exercise.externalExercise,
       sets: exercise.sets.map((set) => ({ reps: set.reps, weight: set.weight })),
     })),
   })
@@ -201,6 +204,7 @@ export function workoutToFormValues(workout: Workout): WorkoutFormValues {
     exercises: workout.exercises.map((exercise) => ({
       id: crypto.randomUUID(),
       exerciseId: exercise.exerciseId,
+      ...(exercise.externalExercise ? { externalExercise: { ...exercise.externalExercise } } : {}),
       exerciseName: exercise.exerciseName,
       muscleGroup: exercise.muscleGroup,
       sets: exercise.sets.map((set) => ({ id: crypto.randomUUID(), reps: String(set.reps), weight: String(set.weight) })),
