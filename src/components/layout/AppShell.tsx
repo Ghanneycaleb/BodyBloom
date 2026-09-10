@@ -1,4 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom'
+import { Suspense } from 'react'
+import { RouteLoading } from '../ui/RouteLoading'
 import { BottomNav } from './BottomNav'
 import { Sidebar } from './Sidebar'
 import { TopBar } from './TopBar'
@@ -14,7 +16,7 @@ export function AppShell() {
       <div className="lg:pl-70">
         <TopBar title={currentPage} />
         <main className="mx-auto min-h-[calc(100vh-5rem)] max-w-container-max px-4 pt-6 pb-[calc(6rem+env(safe-area-inset-bottom))] md:px-6 md:pt-8 lg:px-10 lg:pb-10">
-          <Outlet />
+          <Suspense key={location.pathname} fallback={<RouteLoading />}><Outlet /></Suspense>
         </main>
       </div>
       <BottomNav />
