@@ -10,7 +10,8 @@ async function request(url: string, signal: AbortSignal) {
   signal.throwIfAborted()
   const response = await fetch(url, { signal: AbortSignal.any([signal, AbortSignal.timeout(20000)]), headers: { Accept: 'application/json' } })
   if (!response.ok) throw new Error(`WGER could not load this data (HTTP ${response.status}). Please retry.`)
-  return pageFromDto(await response.json())
+  const data: unknown = await response.json()
+  return pageFromDto(data)
 }
 
 function nextUrl(next: string | null, current: string): string | null {

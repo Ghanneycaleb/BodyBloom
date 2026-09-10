@@ -18,8 +18,12 @@ export function ProgressTrendChart({ periods, grouping, metric }: Props) {
     <XAxis dataKey="label" tickLine={false} axisLine={false} minTickGap={24} tick={{ fontSize: 11, fill: chartTheme.text }} />
     <YAxis width={44} allowDecimals={volume} tickLine={false} axisLine={false} tickFormatter={(value: number) => formatProgressNumber(value, true)} tick={{ fontSize: 11, fill: chartTheme.text }} domain={[0, 'auto']} />
     <Tooltip cursor={volume ? { stroke: chartTheme.grid } : { fill: chartTheme.cursor }} content={({ active, payload }) => {
-      const point = payload?.[0]?.payload as ProgressPeriod | undefined
-      return active && point ? <div className="max-w-60 rounded-xl border border-outline-variant/50 bg-surface-container-lowest p-3 text-xs text-on-surface shadow-soft"><p className="font-semibold">{point.fullLabel}</p><p className="mt-1 text-primary">{formatProgressNumber(point[metric])} {units}</p></div> : null
+      const point: unknown = payload?.[0]?.payload
+      if (!active || typeof point !== 'object' || point === null ||
+          !('fullLabel' in point) || typeof point.fullLabel !== 'string' ||
+          !('volume' in point) || typeof point.volume !== 'number' ||
+          !('count' in point) || typeof point.count !== 'number') return null
+      return <div className="max-w-60 rounded-xl border border-outline-variant/50 bg-surface-container-lowest p-3 text-xs text-on-surface shadow-soft"><p className="font-semibold">{point.fullLabel}</p><p className="mt-1 text-primary">{formatProgressNumber(metric === 'volume' ? point.volume : point.count)} {units}</p></div>
     }} />
   </>
 

@@ -43,7 +43,7 @@ export function pageFromDto(value: unknown): WgerPageDto {
   if (!Array.isArray(data.results) || typeof data.count !== 'number' || !Number.isSafeInteger(data.count) || data.count < 0 || !(data.next === null || typeof data.next === 'string')) {
     throw new Error('WGER returned an unexpected response. Please retry.')
   }
-  return { results: data.results, count: data.count, next: data.next as string | null }
+  return { results: data.results, count: data.count, next: data.next }
 }
 
 function decodeExercise(value: unknown): WgerExerciseDto | null {

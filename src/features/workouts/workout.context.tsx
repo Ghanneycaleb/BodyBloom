@@ -4,9 +4,9 @@ import type { Workout } from './workout.types'
 import { WorkoutContext, type WorkoutContextValue } from './workout.context-core'
 
 export function WorkoutProvider({ children }: { children: ReactNode }) {
-  const [initial] = useState(() => {
+  const [initial] = useState<{ workouts: Workout[]; error: string }>(() => {
     try { return { workouts: getWorkouts(), error: '' } }
-    catch (error) { return { workouts: [] as Workout[], error: error instanceof Error ? error.message : 'Saved workouts could not be loaded.' } }
+    catch (error) { return { workouts: [], error: error instanceof Error ? error.message : 'Saved workouts could not be loaded.' } }
   })
   const [workouts, setWorkouts] = useState<Workout[]>(initial.workouts)
   const [loadError, setLoadError] = useState(initial.error)

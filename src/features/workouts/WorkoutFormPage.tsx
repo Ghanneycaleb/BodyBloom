@@ -19,7 +19,8 @@ export function WorkoutFormPage({ workout }: { workout?: Workout }) {
   const isEditing = Boolean(workout)
   const [initialForm] = useState(() => workout ? workoutToFormValues(workout) : createDefaultWorkoutForm())
   const [form, setForm] = useState<WorkoutFormValues>(() => {
-    const selection = !workout && normalizeExerciseRouteState(location.state)
+    const routeState: unknown = location.state
+    const selection = !workout && normalizeExerciseRouteState(routeState)
     return selection ? { ...initialForm, exercises: [applyExerciseSelection(initialForm.exercises[0], selection)] } : initialForm
   })
   const [pickerTarget, setPickerTarget] = useState<string | null>(null)

@@ -2,6 +2,8 @@ export type ExerciseOption = { id: number; name: string }
 export type ExerciseLicense = { id: number; name: string; url: string | null }
 
 // WGER exerciseinfo embeds translations and related metadata, not a flat name.
+// These DTO types describe decoded records after runtime normalization.
+// Raw API input remains unknown; missing fields are handled by the mappers.
 export type WgerTranslationDto = {
   language: number
   name: string
