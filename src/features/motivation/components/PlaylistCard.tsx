@@ -5,11 +5,11 @@ import { safeSpotifyUrl } from '../motivation.utils'
 import type { MusicPhase, WorkoutPlaylist } from '../motivation.types'
 
 const artwork = {
-  'Warm Up': { icon: Sun, color: 'from-[#e9f5df] to-[#bae8cf] text-primary' },
+  'Warm Up': { icon: Sun, color: 'from-[#e9f5df] to-[#bae8cf] text-brand-strong' },
   Strength: { icon: Dumbbell, color: 'from-[#2a313d] to-[#006c49] text-primary-fixed' },
   Cardio: { icon: Footprints, color: 'from-[#006c49] to-[#138468] text-white' },
   Focus: { icon: AudioLines, color: 'from-[#e7eefe] to-[#cad6ed] text-[#384d66]' },
-  'Cool Down': { icon: Leaf, color: 'from-[#e5f6ef] to-[#c5dcd4] text-primary' },
+  'Cool Down': { icon: Leaf, color: 'from-[#e5f6ef] to-[#c5dcd4] text-brand-strong' },
 } satisfies Record<MusicPhase, { icon: typeof Sun; color: string }>
 
 export function PlaylistCard({ playlist }: { playlist: WorkoutPlaylist }) {

@@ -14,11 +14,11 @@ export function ConsistencyCard({ data }: { data: ProgressAnalytics }) {
         {Array.from({ length: data.calendarPadding }, (_, index) => <span key={`padding-${index}`} aria-hidden="true" />)}
         {data.calendar.map((day) => {
           const label = `${formatWorkoutDate(day.date)}: ${day.count} ${day.count === 1 ? 'workout' : 'workouts'}`
-          return <span key={day.date} role="listitem" aria-label={label} title={label} className={`flex min-h-9 min-w-0 items-center justify-center rounded-md text-xs font-semibold ${day.count > 1 ? 'bg-primary text-white' : day.count === 1 ? 'bg-primary-fixed-dim/60 text-on-primary-fixed' : 'bg-surface-container text-secondary'}`}><span aria-hidden="true">{day.count || '–'}</span></span>
+          return <span key={day.date} role="listitem" aria-label={label} title={label} className={`flex min-h-9 min-w-0 items-center justify-center rounded-md text-xs font-semibold ${day.count > 1 ? 'bg-primary text-on-primary' : day.count === 1 ? 'bg-primary-fixed-dim/60 text-on-primary-fixed' : 'bg-surface-container text-secondary'}`}><span aria-hidden="true">{day.count || '–'}</span></span>
         })}
       </div>
       <p className="mt-3 text-xs text-secondary">– No workouts · 1 One workout · 2+ Multiple workouts</p>
-      <div className="mt-5 rounded-xl bg-primary p-4 text-white">
+      <div className="mt-5 rounded-xl bg-primary p-4 text-on-primary">
         <p className="text-sm font-semibold">Active on {formatProgressNumber(data.activeDays)} of {formatProgressNumber(data.days)} days</p>
         <p className="mt-1 text-xs leading-5">{formatProgressNumber(data.activePercentage)}% of days in the full selected range. Rest days appear as inactive.</p>
       </div>

@@ -1,6 +1,7 @@
 import { useId } from 'react'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Card } from '../../../components/ui/Card'
+import { chartTheme } from '../../../components/ui/chartTheme'
 import { formatProgressNumber } from '../progress.calculations'
 import type { ProgressGrouping, ProgressPeriod } from '../progress.types'
 
@@ -13,12 +14,12 @@ export function ProgressTrendChart({ periods, grouping, metric }: Props) {
   const units = volume ? 'kg × reps' : 'workouts'
   const description = `${grouping[0].toUpperCase()}${grouping.slice(1)} totals, including inactive periods. Edge periods include only dates in your range.`
   const axes = <>
-    <CartesianGrid stroke="#dce2f3" strokeDasharray="3 3" vertical={false} />
-    <XAxis dataKey="label" tickLine={false} axisLine={false} minTickGap={24} tick={{ fontSize: 11, fill: '#575e70' }} />
-    <YAxis width={44} allowDecimals={volume} tickLine={false} axisLine={false} tickFormatter={(value: number) => formatProgressNumber(value, true)} tick={{ fontSize: 11, fill: '#575e70' }} domain={[0, 'auto']} />
-    <Tooltip content={({ active, payload }) => {
+    <CartesianGrid stroke={chartTheme.grid} strokeDasharray="3 3" vertical={false} />
+    <XAxis dataKey="label" tickLine={false} axisLine={false} minTickGap={24} tick={{ fontSize: 11, fill: chartTheme.text }} />
+    <YAxis width={44} allowDecimals={volume} tickLine={false} axisLine={false} tickFormatter={(value: number) => formatProgressNumber(value, true)} tick={{ fontSize: 11, fill: chartTheme.text }} domain={[0, 'auto']} />
+    <Tooltip cursor={volume ? { stroke: chartTheme.grid } : { fill: chartTheme.cursor }} content={({ active, payload }) => {
       const point = payload?.[0]?.payload as ProgressPeriod | undefined
-      return active && point ? <div className="max-w-60 rounded-xl border border-outline-variant/50 bg-white p-3 text-xs shadow-soft"><p className="font-semibold">{point.fullLabel}</p><p className="mt-1 text-primary">{formatProgressNumber(point[metric])} {units}</p></div> : null
+      return active && point ? <div className="max-w-60 rounded-xl border border-outline-variant/50 bg-surface-container-lowest p-3 text-xs text-on-surface shadow-soft"><p className="font-semibold">{point.fullLabel}</p><p className="mt-1 text-primary">{formatProgressNumber(point[metric])} {units}</p></div> : null
     }} />
   </>
 
@@ -31,14 +32,14 @@ export function ProgressTrendChart({ periods, grouping, metric }: Props) {
         <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           {volume ? (
             <AreaChart data={periods} accessibilityLayer margin={{ top: 12, right: 12, bottom: 8, left: 0 }}>
-              <defs><linearGradient id={id} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#10b981" stopOpacity={0.3} /><stop offset="100%" stopColor="#10b981" stopOpacity={0.02} /></linearGradient></defs>
+              <defs><linearGradient id={id} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={chartTheme.fill} stopOpacity={0.3} /><stop offset="100%" stopColor={chartTheme.fill} stopOpacity={0.02} /></linearGradient></defs>
               {axes}
-              <Area type="linear" dataKey="volume" name="Training volume" stroke="#006c49" fill={`url(#${id})`} strokeWidth={2} dot={periods.length === 1 ? { r: 4 } : false} isAnimationActive={false} />
+              <Area type="linear" dataKey="volume" name="Training volume" stroke={chartTheme.primary} fill={`url(#${id})`} strokeWidth={2} dot={periods.length === 1 ? { r: 4 } : false} isAnimationActive={false} />
             </AreaChart>
           ) : (
             <BarChart data={periods} accessibilityLayer margin={{ top: 12, right: 12, bottom: 8, left: 0 }}>
               {axes}
-              <Bar dataKey="count" name="Workouts" fill="#006c49" radius={[4, 4, 0, 0]} maxBarSize={36} isAnimationActive={false} />
+              <Bar dataKey="count" name="Workouts" fill={chartTheme.primary} radius={[4, 4, 0, 0]} maxBarSize={36} isAnimationActive={false} />
             </BarChart>
           )}
         </ResponsiveContainer>

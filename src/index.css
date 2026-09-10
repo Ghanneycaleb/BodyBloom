@@ -7,6 +7,14 @@
   --color-primary-fixed: #6ffbbe;
   --color-primary-fixed-dim: #4edea3;
   --color-on-primary: #ffffff;
+  --color-on-primary-container: #00422b;
+  --color-brand-strong: #006c49;
+  --color-on-brand: #ffffff;
+  --color-exercise-image: #f0f3ff;
+  --color-overlay: rgb(21 28 39 / 45%);
+  --color-chart-grid: #dce2f3;
+  --color-chart-primary: #006c49;
+  --color-chart-fill: #10b981;
   --color-on-primary-fixed: #002113;
   --color-on-primary-fixed-variant: #005236;
   --color-background: #f9f9ff;
@@ -39,12 +47,43 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root[data-theme='dark'] {
+  --color-primary: #79cba6;
+  --color-on-primary: #082b1e;
+  --color-on-primary-fixed-variant: #c3ecd7;
+  --color-background: #151c27;
+  --color-surface: #18212d;
+  --color-surface-container-lowest: #1e2936;
+  --color-surface-container-low: #243140;
+  --color-surface-container: #2a3949;
+  --color-surface-container-high: #324254;
+  --color-surface-container-highest: #3b4c60;
+  --color-inverse-surface: #111923;
+  --color-on-surface: #edf2f7;
+  --color-on-surface-variant: #c7d5ce;
+  --color-secondary: #bac6d5;
+  --color-outline: #8b9baa;
+  --color-outline-variant: #617487;
+  --color-error: #ffb4ab;
+  --color-overlay: rgb(5 10 18 / 72%);
+  --color-chart-grid: #43556b;
+  --color-chart-primary: #79cba6;
+  --color-chart-fill: #66b993;
+  --color-exercise-image: #e4eaf0;
+  --shadow-soft: 0 4px 20px rgb(0 0 0 / 16%);
+}
+
 @theme inline {
   --color-primary: var(--color-primary);
   --color-primary-container: var(--color-primary-container);
   --color-primary-fixed: var(--color-primary-fixed);
   --color-primary-fixed-dim: var(--color-primary-fixed-dim);
   --color-on-primary: var(--color-on-primary);
+  --color-on-primary-container: var(--color-on-primary-container);
+  --color-brand-strong: var(--color-brand-strong);
+  --color-on-brand: var(--color-on-brand);
+  --color-exercise-image: var(--color-exercise-image);
+  --color-overlay: var(--color-overlay);
   --color-on-primary-fixed: var(--color-on-primary-fixed);
   --color-on-primary-fixed-variant: var(--color-on-primary-fixed-variant);
   --color-background: var(--color-background);

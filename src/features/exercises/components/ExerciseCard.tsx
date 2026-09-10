@@ -3,7 +3,7 @@ import { ExerciseImage } from './ExerciseImage'
 import type { Exercise } from '../exercise.types'
 
 export function ExerciseCard({ exercise, onSelect }: { exercise: Exercise; onSelect: (exercise: Exercise) => void }) {
-  return <button type="button" onClick={() => onSelect(exercise)} aria-label={`View ${exercise.name} details`} data-exercise-id={exercise.sourceId} className="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-outline-variant/40 bg-white text-left shadow-soft transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
+  return <button type="button" onClick={() => onSelect(exercise)} aria-label={`View ${exercise.name} details`} data-exercise-id={exercise.sourceId} className="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-outline-variant/40 bg-surface-container-lowest text-left shadow-soft transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
     <ExerciseImage exercise={exercise} />
     <span className="flex w-full min-w-0 flex-1 flex-col gap-3 p-3 sm:p-5">
       <span className="line-clamp-2 break-words text-base font-bold tracking-tight sm:text-lg">{exercise.name}</span>

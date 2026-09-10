@@ -61,7 +61,7 @@ export function Dialog({
           if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus() }
           else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus() }
         }}
-        className={`fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] ${size === 'wide' ? 'max-w-2xl' : 'max-w-md'} overflow-y-auto rounded-2xl border border-outline-variant/60 bg-surface-container-lowest p-5 text-on-surface shadow-soft backdrop:bg-[#151c27]/40 backdrop:backdrop-blur-[2px]`}
+        className={`fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] ${size === 'wide' ? 'max-w-2xl' : 'max-w-md'} overflow-y-auto rounded-2xl border border-outline-variant/60 bg-surface-container-lowest p-5 text-on-surface shadow-soft backdrop:bg-overlay backdrop:backdrop-blur-[2px]`}
       >
         <div className="space-y-2">
           <div className="flex items-start justify-between gap-3">

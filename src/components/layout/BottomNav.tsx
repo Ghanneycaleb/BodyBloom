@@ -20,7 +20,7 @@ export function BottomNav() {
           <Link
             key={path}
             to={path}
-            className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-[11px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${isActive ? 'text-primary' : 'text-secondary hover:text-primary'}`}
+            className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-[11px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${isActive ? 'bg-primary/10 text-primary underline decoration-2 underline-offset-4' : 'text-secondary hover:text-primary'}`}
             aria-current={isActive ? 'page' : undefined}
           >
             <Icon size={20} strokeWidth={isActive ? 2.5 : 2} aria-hidden="true" />
@@ -28,7 +28,7 @@ export function BottomNav() {
           </Link>
         )
       })}
-      <button type="button" onClick={() => setMoreOpen(true)} aria-haspopup="dialog" aria-expanded={moreOpen} className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-[11px] font-medium focus-visible:outline-2 focus-visible:outline-primary ${moreActive ? 'text-primary' : 'text-secondary'}`}><Ellipsis size={20} aria-hidden="true" />More</button>
+      <button type="button" onClick={() => setMoreOpen(true)} aria-haspopup="dialog" aria-expanded={moreOpen} className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-[11px] font-medium focus-visible:outline-2 focus-visible:outline-primary ${moreActive ? 'bg-primary/10 text-primary underline decoration-2 underline-offset-4' : 'text-secondary'}`}><Ellipsis size={20} aria-hidden="true" />More</button>
     </nav>
     <Dialog open={moreOpen} title="Explore BodyBloom" cancelText="Close" onClose={() => setMoreOpen(false)}>
       <nav aria-label="More pages" className="space-y-2 pt-3">

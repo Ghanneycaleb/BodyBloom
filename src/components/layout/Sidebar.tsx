@@ -14,7 +14,7 @@ export function Sidebar() {
         </div>
         <div>
           <p className="text-xl font-bold tracking-tight text-white">BodyBloom</p>
-          <p className="text-xs font-medium text-surface-variant">Premium Performance</p>
+          <p className="text-xs font-medium text-inverse-on-surface/80">Premium Performance</p>
         </div>
       </div>
 
@@ -25,7 +25,7 @@ export function Sidebar() {
             <Link
               key={path}
               to={path}
-              className={`relative flex min-h-12 items-center gap-3 rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-fixed ${isActive ? 'bg-white/10 text-primary-fixed before:absolute before:left-0 before:h-8 before:w-1 before:rounded-full before:bg-primary-fixed' : 'text-surface-variant hover:bg-white/5 hover:text-white'}`}
+              className={`relative flex min-h-12 items-center gap-3 rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-fixed ${isActive ? 'bg-white/10 text-primary-fixed before:absolute before:left-0 before:h-8 before:w-1 before:rounded-full before:bg-primary-fixed' : 'text-inverse-on-surface/80 hover:bg-white/5 hover:text-white'}`}
               aria-current={isActive ? 'page' : undefined}
             >
               <Icon size={20} strokeWidth={isActive ? 2.4 : 2} aria-hidden="true" />
@@ -37,7 +37,7 @@ export function Sidebar() {
 
       <div className="border-t border-white/10 p-6">
         <Button className="mb-3 w-full" type="button">Upgrade to Pro</Button>
-        <p className="text-center text-xs text-surface-variant">Your progress, in one place.</p>
+        <p className="text-center text-xs text-inverse-on-surface/80">Your progress, in one place.</p>
       </div>
     </aside>
   )

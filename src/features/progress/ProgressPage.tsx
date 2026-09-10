@@ -30,7 +30,7 @@ export function ProgressPage() {
           <span className="rounded-full bg-primary/10 p-5 text-primary"><ChartNoAxesCombined size={36} aria-hidden="true" /></span>
           <h2 className="text-2xl font-bold">Your progress starts with one workout</h2>
           <p className="max-w-md text-sm leading-6 text-secondary">Log your training to see your frequency, volume, and consistency grow over time.</p>
-          <Link to="/log-workout" className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"><Plus size={18} aria-hidden="true" />Log Workout</Link>
+          <Link to="/log-workout" className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-on-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"><Plus size={18} aria-hidden="true" />Log Workout</Link>
         </Card>
       ) : <>
         <p role="status" className="text-sm text-secondary">{formatProgressPeriod(data.start, data.end)} · {data.totalWorkouts} {data.totalWorkouts === 1 ? 'workout' : 'workouts'}</p>

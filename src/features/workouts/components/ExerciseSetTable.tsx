@@ -75,7 +75,7 @@ export function ExerciseSetTable({
                   aria-label={`Remove set ${setIndex + 1}`}
                   onClick={() => onRemoveSet(exercise.id, set.id)}
                   disabled={exercise.sets.length === 1}
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-outline-variant bg-surface-container-low text-sm font-medium text-secondary transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-outline-variant bg-surface-container-low text-sm font-medium text-secondary transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:bg-surface-container disabled:text-secondary"
                 >
                   ×
                 </button>
