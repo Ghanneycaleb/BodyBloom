@@ -1,7 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { Leaf } from 'lucide-react'
 import { navigationItems } from './navigation'
-import { Button } from '../ui/Button'
 
 export function Sidebar() {
   const location = useLocation()
@@ -36,7 +35,6 @@ export function Sidebar() {
       </nav>
 
       <div className="border-t border-white/10 p-6">
-        <Button className="mb-3 w-full" type="button">Upgrade to Pro</Button>
         <p className="text-center text-xs text-inverse-on-surface/80">Your progress, in one place.</p>
       </div>
     </aside>

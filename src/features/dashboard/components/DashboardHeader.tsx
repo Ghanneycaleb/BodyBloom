@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Dumbbell } from 'lucide-react'
-import { Button } from '../../../components/ui/Button'
 
 type DashboardHeaderProps = {
   workoutCount: number
@@ -21,12 +20,10 @@ export function DashboardHeader({ workoutCount }: DashboardHeaderProps) {
         </p>
       </div>
 
-      <Link to="/log-workout" aria-label="Log a workout">
-        <Button type="button" className="gap-2 px-5">
+      <Link to="/log-workout" aria-label="Log a workout" className="inline-flex min-h-12 items-center justify-center gap-2 self-start rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-on-primary transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:self-auto">
           <Dumbbell size={18} aria-hidden="true" />
           Log Workout
           <ArrowRight size={16} aria-hidden="true" />
-        </Button>
       </Link>
     </header>
   )

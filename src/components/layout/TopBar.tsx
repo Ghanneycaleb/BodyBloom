@@ -1,5 +1,4 @@
-import { Bell, Leaf } from 'lucide-react'
-import { IconButton } from '../ui/IconButton'
+import { Leaf } from 'lucide-react'
 import { ThemeControl } from '../../features/theme/ThemeControl'
 
 type TopBarProps = {
@@ -20,7 +19,6 @@ export function TopBar({ title }: TopBarProps) {
       </div>
       <div className="flex shrink-0 items-center gap-1 sm:gap-2">
         <ThemeControl />
-        <IconButton label="View notifications" type="button"><Bell size={20} /></IconButton>
         <div className="hidden items-center gap-2 border-l border-outline-variant/40 pl-3 sm:flex">
           <div className="flex size-10 items-center justify-center rounded-full bg-primary-fixed text-sm font-bold text-on-primary-fixed">BB</div>
           <span className="text-sm font-medium text-on-surface">BodyBloom member</span>

@@ -2,6 +2,7 @@ import { WorkoutHistoryPage, ExerciseExplorerPage, ProgressPage, MotivationPage,
 import { createBrowserRouter } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
 import { DashboardPage } from '../features/dashboard/DashboardPage'
+import { NotFoundPage } from '../pages/NotFoundPage'
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ export const router = createBrowserRouter([
       { path: '/exercises', element: <ExerciseExplorerPage /> },
       { path: '/progress', element: <ProgressPage /> },
       { path: '/motivation', element: <MotivationPage /> },
+      { path: '*', element: <NotFoundPage /> },
     ],
   },
 ])

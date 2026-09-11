@@ -8,7 +8,8 @@ import { navigationItems } from './navigation'
 
 export function AppShell() {
   const location = useLocation()
-  const currentPage = location.pathname.startsWith('/history/') ? 'Edit Workout' : navigationItems.find((item) => item.path === location.pathname)?.label ?? 'Dashboard'
+  const pathname = location.pathname.replace(/\/+$/, '') || '/'
+  const currentPage = /^\/history\/[^/]+\/edit$/.test(pathname) ? 'Edit Workout' : navigationItems.find((item) => item.path === pathname)?.label ?? 'Page not found'
 
   return (
     <div className="min-h-screen bg-background text-on-surface">
