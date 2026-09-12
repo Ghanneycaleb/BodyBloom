@@ -2,7 +2,7 @@
 
 ### Track your progress. Feel your growth.
 
-![alt text](bb-dashboard.png)
+![BodyBloom dashboard showing a dark fitness tracking interface with a left sidebar, top navigation, a welcome banner, metric cards, and a recent workouts panel; text reads BodyBloom Dashboard, Good morning, athlete., Total Workouts, Current Streak, Total Volume, Most Performed, and Latest sessions; the overall tone is clean, focused, and motivating.](./bb-dashboard.png)
 
 **BodyBloom** is a responsive fitness tracking web application for logging workouts, exploring exercises, monitoring training progress, and building consistency.
 
@@ -325,5 +325,4 @@ Computer Engineer and software developer focused on building practical, user-cen
 ## License
 
 This project is currently maintained as a portfolio and educational project.
-````
 
