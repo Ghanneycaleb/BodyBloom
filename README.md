@@ -2,14 +2,13 @@
 
 ### Track your progress. Feel your growth.
 
+**BodyBloom** is a responsive fitness tracking web application for logging workouts, exploring exercises, monitoring training progress, and building consistency.
+
+### [Launch BodyBloom →](https://body-bloom.vercel.app)
+
 <p align="center">
   <img src="./bb-dashboard.png" alt="BodyBloom Dashboard" width="800">
 </p>
-
-**BodyBloom** is a responsive fitness tracking web application for logging workouts, exploring exercises, monitoring training progress, and building consistency.
-
-
-### [Launch BodyBloom →](https://body-bloom.vercel.app)
 
 **Current Release:** `v1.0.0`
 
