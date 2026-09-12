@@ -1,37 +1,215 @@
 # BodyBloom
 
-Track your progress. Feel your growth.
+### Track your progress. Feel your growth.
 
-A responsive fitness-tracking MVP for logging workouts and seeing your progress.
+![alt text](bb-dashboard.png)
+
+**BodyBloom** is a responsive fitness tracking web application for logging workouts, exploring exercises, monitoring training progress, and building consistency.
+
+
+### [Launch BodyBloom →](https://body-bloom.vercel.app)
+
+**Current Release:** `v1.0.0`
+
+---
+
+## Overview
+
+BodyBloom was built around a simple goal: make fitness progress easy to record, understand, and revisit.
+
+Users can log complete workout sessions, explore exercises through the WGER database, review and edit workout history, and turn their training data into meaningful progress insights.
+
+The current release is a client-side MVP. Workout data is validated and stored locally in the browser, keeping the application lightweight and usable without requiring an account.
+
+---
 
 ## Features
 
-- Manual or WGER-assisted workout entry with sets, reps, and weight
-- Workout history, editing, and deletion
-- Dashboard statistics, activity charts, streaks, and Progress analytics
-- Searchable WGER Exercise Explorer with workout prefill
-- Daily local motivation and curated outbound Spotify playlist links
-- System, Light, and Dark themes; desktop and mobile navigation
+### Workout Tracking
 
-## Stack
+- Log exercises, sets, repetitions, weight, date, and workout duration
+- Add exercises manually or select them from WGER
+- Automatically calculate training volume
+- Edit and delete previously recorded workouts
+- Persist workout history between browser sessions
 
-React 19, TypeScript 6 (strict), Vite 8, Tailwind CSS 4, React Router 7, Recharts 3, and Lucide React. No backend, authentication, or additional state library.
+### Exercise Explorer
 
-## Run locally
+- Search live exercise data from the WGER API
+- Filter exercises by category, muscle group, and equipment
+- View detailed exercise information
+- Add WGER exercises directly to the workout logger
+- Continue manual workout logging when WGER is unavailable
 
-Use a Node.js version supported by Vite 8 (the project has been verified with Node 20.19.2).
+### Progress Analytics
 
-```sh
+- Total workouts
+- Training volume
+- Current workout streak
+- Average workouts per week
+- Active training days
+- Workout frequency
+- Exercise frequency
+- Training-volume trends
+- Consistency visualization
+- 4 Weeks, 3 Months, 6 Months, and All Time analysis
+
+### Workout History
+
+- Browse previously completed workouts
+- Filter history by All Time, This Week, or This Month
+- Inspect individual exercises and sets
+- Edit existing workout sessions
+- Delete workouts with confirmation
+- Automatically reflect changes across Dashboard and Progress analytics
+
+### Motivation
+
+- Daily BodyBloom motivation
+- Training-phase guidance
+- Curated Spotify playlists for different workout phases
+- Safe outbound playlist links without requiring Spotify authentication
+
+### Responsive Experience
+
+- Desktop sidebar navigation
+- Mobile bottom navigation
+- System, Light, and Dark themes
+- Persistent theme preferences
+- Responsive forms, charts, cards, dialogs, and exercise grids
+
+---
+
+## Tech Stack
+
+| Category | Technology |
+| --- | --- |
+| Frontend | React 19 |
+| Language | TypeScript 6 — Strict Mode |
+| Build Tool | Vite 8 |
+| Styling | Tailwind CSS 4 |
+| Routing | React Router 7 |
+| Data Visualization | Recharts 3 |
+| Icons | Lucide React |
+| Exercise Data | WGER API |
+| Persistence | Browser localStorage |
+| Deployment | Vercel |
+| Version Control | Git & GitHub |
+
+No backend, authentication service, or additional state-management library is required for the current release.
+
+---
+
+## Architecture
+
+BodyBloom follows a feature-oriented architecture that separates application infrastructure, reusable UI, and domain-specific functionality.
+
+```text
+src/
+├── app/
+├── components/
+│   ├── layout/
+│   └── ui/
+├── features/
+│   ├── dashboard/
+│   ├── workouts/
+│   ├── history/
+│   ├── exercises/
+│   ├── progress/
+│   ├── motivation/
+│   └── theme/
+└── lib/
+```
+
+Workout data flows through a centralized application layer:
+
+```text
+localStorage
+     ↓
+Validation & Storage
+     ↓
+WorkoutProvider
+     ↓
+useWorkouts()
+     ↓
+Dashboard · Workout Forms · History · Progress
+```
+
+Feature routes are code-split to reduce initial JavaScript loading, while external and persisted data are validated before being consumed by application features.
+
+---
+
+## Engineering Highlights
+
+Beyond the core feature set, BodyBloom was built with attention to production-oriented frontend engineering.
+
+- **Strict TypeScript** — strict mode is enabled across the application.
+- **Defensive persistence** — stored workout data is parsed and validated before use.
+- **Resilient API integration** — WGER failures, timeouts, malformed responses, stale requests, and unavailable images are handled gracefully.
+- **Accessible interactions** — forms, dialogs, navigation, loading states, errors, and keyboard interactions use practical accessibility patterns.
+- **Responsive design** — the application was verified across desktop, tablet, and mobile layouts.
+- **Route-level code splitting** — non-critical features are loaded on demand to reduce initial JavaScript delivery.
+- **Theme persistence** — System, Light, and Dark preferences persist between visits.
+
+The production optimization pass reduced the initial empty-Dashboard JavaScript asset graph from approximately **769 kB to 315 kB raw**.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20.19+ or another version supported by Vite 8
+- npm
+- Git
+
+### Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Ghanneycaleb/BodyBloom.git
+cd BodyBloom
+```
+
+Install dependencies:
+
+```bash
 npm ci
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-## Build and verify
+Create a production build:
 
-```sh
+```bash
+npm run build
+```
+
+Preview the production build locally:
+
+```bash
+npm run preview
+```
+
+---
+
+## Testing & Quality
+
+Run lint and production build verification:
+
+```bash
 npm run lint
 npm run build
-npm run preview
+```
+
+Run the repeatable application tests:
+
+```bash
 node scripts/test-progress.mjs
 node scripts/test-theme.mjs
 node scripts/test-motivation.mjs
@@ -39,20 +217,113 @@ node scripts/test-workout-integration.mjs
 node scripts/test-release-boundaries.mjs
 ```
 
-Production output is in `dist/`. See `docs/` for architecture and audit reports.
+BodyBloom `v1.0.0` passed **29 automated tests** covering progress calculations, themes, workout/WGER integration, storage boundaries, and release-critical behavior.
 
-## Data and external services
+The production release was also verified across workout CRUD flows, responsive layouts, Light/Dark themes, WGER failure scenarios, route navigation, persistence, and practical keyboard interactions.
 
-Workouts are saved in this browser's localStorage, with a separate theme preference key. There is no account, cloud sync, or backup service. Clearing browser/site data removes saved workouts; different browsers and origins have separate data.
+See [`docs/`](./docs/) for additional architecture, implementation, and release-audit documentation.
 
-WGER supplies exercise data without stored credentials. Exercise search needs a network connection; manual logging remains usable if WGER fails. Spotify links open public playlists in a new tab; this app does not authenticate with Spotify or play music itself.
+---
 
-## Static deployment
+## Data & External Services
 
-Set the project/base directory to `bodybloom` if deploying from the parent workspace, run `npm run build`, and publish `dist` (relative to that directory). Deploy at the domain root with the current router/base configuration.
+### Workout Data
 
-History-based routes require an SPA fallback for direct navigation and refresh. `vercel.json` supplies the Vercel rewrite; `public/_redirects` is copied into `dist` for Netlify. Existing files should be served normally and other paths should reach `index.html`. After deploying, check direct `/history`, `/progress`, and edit-route refreshes on the actual host.
+BodyBloom `v1.0.0` does not require an account.
 
-Host guidance: [Vercel Vite SPA rewrites](https://vercel.com/docs/frameworks/frontend/vite), [Netlify SPA rewrites](https://docs.netlify.com/manage/routing/redirects/rewrites-proxies/).
+Workout data is stored using the browser's `localStorage` and is not uploaded to a BodyBloom server.
 
-No deployment is performed by the audit scripts. Deploying to a new origin does not transfer local workouts from localhost or another site.
+This means:
+
+- Workouts remain specific to the current browser and origin
+- Clearing site data removes locally stored workouts
+- Workouts do not currently synchronize between devices
+- Cloud backup and account-based recovery are not currently available
+
+### WGER
+
+WGER provides exercise data without stored credentials.
+
+Exercise discovery requires a network connection, but manual workout logging remains available if WGER cannot be reached.
+
+### Spotify
+
+BodyBloom provides curated outbound Spotify playlist links. The application does not authenticate with Spotify or stream music directly.
+
+---
+
+## Deployment
+
+BodyBloom is deployed on **Vercel**.
+
+### [Live Application →](https://body-bloom.vercel.app)
+
+The application includes SPA fallback configuration for direct navigation and refreshes across history-based routes.
+
+For local production verification:
+
+```bash
+npm run build
+npm run preview
+```
+
+Production output is generated in `dist/`.
+
+---
+
+## Roadmap
+
+### v1.0.0
+
+- [x] Workout logging
+- [x] Workout history, editing, and deletion
+- [x] WGER Exercise Explorer
+- [x] WGER-to-workout integration
+- [x] Progress analytics
+- [x] Workout streak tracking
+- [x] Training-volume visualization
+- [x] Motivation Hub
+- [x] Spotify playlist recommendations
+- [x] Responsive desktop and mobile experience
+- [x] System, Light, and Dark themes
+- [x] Route-level code splitting
+- [x] Production deployment
+
+### Future
+
+- [ ] User authentication
+- [ ] Cloud workout storage
+- [ ] Cross-device synchronization
+- [ ] User profiles
+- [ ] Cloud backup and recovery
+- [ ] Expanded progress insights
+
+The current release intentionally remains a lightweight client-side application. Cloud functionality will be evaluated as a separate evolution of the architecture.
+
+---
+
+## Release
+
+**Version:** `v1.0.0`  
+**Status:** Live  
+**Deployment:** Vercel
+
+### [Try BodyBloom →](https://body-bloom.vercel.app)
+
+---
+
+## Author
+
+**Caleb Ghanney**
+
+Computer Engineer and software developer focused on building practical, user-centered digital products.
+
+[GitHub](https://github.com/Ghanneycaleb)
+
+---
+
+## License
+
+This project is currently maintained as a portfolio and educational project.
+````
+
